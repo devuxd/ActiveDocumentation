@@ -7,6 +7,11 @@
 
     <script type="text/javascript" src="prototype.js"></script>
 
+    <!-- Provides a precomputed JSON object that stores the PSI class relationships
+         and contains methods to work with the object.
+    -->
+    <script type="text/javascript" src="precomputedclasstable.js"></script>
+
     <script type="text/javascript">
 
         var projectHierarchy = null;
@@ -119,8 +124,8 @@
 
                     }else{
 
-                        console.log(e.data);
                         console.log("Oops.");
+                        console.log(e.command);
 
                         // don't know what to do with this type of message
                     }
@@ -164,20 +169,9 @@
       <form id="sendForm"><input type="text" id="textField" value="" style="width:200px;"> 
         <input type="submit" value="Send"></form><br>
       <form>
-        <textarea id="log" rows="30" cols="100" style="font-family:monospace; color:red;"></textarea>
+        <textarea id="log" rows="30" cols="100" style="font-family:monospace; color:red;" spellcheck="false"></textarea>
       </form>
       <br>
       <input id="ofyNow" type="button" value="Run ofy.now() Regex" onclick="">
-      <script type="text/javascript">
-        
-        function astTreeWalk(){
-            
-            var curr = projectHierarchy;
-
-            
-
-        }
-
-      </script>
   </body>
 </html>

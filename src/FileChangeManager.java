@@ -12,6 +12,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.util.messages.MessageBusConnection;
+import core.model.PsiClassHierarchyBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -42,6 +43,11 @@ public class FileChangeManager implements ApplicationComponent, BulkFileListener
     // precondition: event instanceof VFileContentChangeEvent => true
     public void handleVFileChangeEvent(VFileEvent event){
         VirtualFile file = event.getFile();
+
+        if(GrepServerToolWindowFactory.shouldIgnoreFile(file)){
+            return;
+        }
+
         Project project = ProjectManager.getInstance().getOpenProjects()[0];
         PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
 
@@ -59,12 +65,25 @@ public class FileChangeManager implements ApplicationComponent, BulkFileListener
         s.sendToAll(MessageProcessor.encodeData(new Object[]{"IDEA", "WEB", "UPDATE_CODE_IN_FILE", data}).toString());
         System.out.println("Handled: " + event);
 
+        // Class Table now precomputed (for PSI classes)
+        /*if(psiFile instanceof PsiJavaFile){
+            JsonObject newCt = new JsonObject();
+            PsiClassHierarchyBuilder classBuilder = new PsiClassHierarchyBuilder(newCt);
+            classBuilder.visit(psiFile, new JsonObject());
+            s.sendToAll(MessageProcessor.encodeData(new Object[]{"IDEA", "WEB", "UPDATE_PSI_CLASS_TABLE", newCt}).toString());
+        }*/
+
     }
 
     // precondition: event instanceof VFileContentChangeEvent => true
     public void handleVFileDeleteEvent(VFileEvent event){
 
         VirtualFile file =  event.getFile();
+
+        if(GrepServerToolWindowFactory.shouldIgnoreFile(file)){
+            return;
+        }
+
         JsonObject data = new JsonObject();
         data.addProperty("canonicalPath", file.getCanonicalPath());
 
@@ -76,6 +95,11 @@ public class FileChangeManager implements ApplicationComponent, BulkFileListener
     public void handleVFileCreateEvent(VFileEvent event){
 
         VirtualFile file =  event.getFile();
+
+        if(GrepServerToolWindowFactory.shouldIgnoreFile(file)){
+            return;
+        }
+
         Project project = ProjectManager.getInstance().getOpenProjects()[0];
         PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
 
@@ -111,6 +135,10 @@ public class FileChangeManager implements ApplicationComponent, BulkFileListener
 
         VFilePropertyChangeEvent pcevent = (VFilePropertyChangeEvent) event;
         VirtualFile file = pcevent.getFile();
+
+        if(GrepServerToolWindowFactory.shouldIgnoreFile(file)){
+            return;
+        }
 
         if(pcevent.getPropertyName().equals("name")){ // rename of a file
             System.out.println("RENAME");
