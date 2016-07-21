@@ -64,8 +64,10 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
                 try {
                     WebSocketImpl.DEBUG = false;
                     int port = 8887; // 843 flash policy port
-                    JsonObject ct = generateClassTable();
                     s = new ChatServer(port, MessageProcessor.encodeData(new Object[]{"IDEA", "WEB", "INITIAL_PROJECT_HIERARCHY", generateProjectHierarchyAsJSON()}).toString());
+                    if(PsiPreCompEngine.recomputePsiClassTable){
+                        generatePSIClassTable();
+                    }
                     s.start();
                     System.out.println();
                     // s.sendToAll(MessageProcessor.encodeData(new Object[]{"IDEA", "WEB", "INITIAL_PSI_CLASS_TABLE", ct}).toString());
@@ -86,7 +88,8 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
 
     }
 
-    public static JsonObject generateClassTable(){
+    // SHOULD NOT USE UNLESS YOU ARE BUILDING THE PSI CLASS HIERARCHY IF INTELLIJ ISSUED SOME NEW FEATURES / UPDATES
+    public static JsonObject generatePSIClassTable(){
 
         // start off with root
         Project project = ProjectManager.getInstance().getOpenProjects()[0];
@@ -114,7 +117,7 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
             }
             q = new_q;
         }
-
+        System.out.println(classTable);
         return classTable;
     }
 
@@ -146,11 +149,13 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
 
         // json version of root
         JsonObject jsonRootDirectory = new JsonObject();
-        jsonRootDirectory.addProperty("canonicalPath", rootDirectoryVirtualFile.getCanonicalPath());
-        jsonRootDirectory.addProperty("parent", "");
-        jsonRootDirectory.addProperty("name", rootDirectoryVirtualFile.getNameWithoutExtension());
-        jsonRootDirectory.addProperty("isDirectory", true);
+        JsonObject properties = new JsonObject();
+        properties.addProperty("canonicalPath", rootDirectoryVirtualFile.getCanonicalPath());
+        properties.addProperty("parent", "");
+        properties.addProperty("name", rootDirectoryVirtualFile.getNameWithoutExtension());
+        properties.addProperty("isDirectory", true);
         jsonRootDirectory.add("children", new JsonArray());
+        jsonRootDirectory.add("properties", properties);
 
         // set up a hashmap for the traversal
         HashMap<String, JsonObject> canonicalToJsonMap = new HashMap<String, JsonObject>();
@@ -175,21 +180,24 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
                     }
                     new_q.add(childOfItem);
                     JsonObject jsonChildOfItem = new JsonObject();
+                    JsonObject propertiesOfChild = new JsonObject();
                     if (childOfItem.isDirectory()) {
-                        jsonChildOfItem.addProperty("canonicalPath", childOfItem.getCanonicalPath());
-                        jsonChildOfItem.addProperty("parent", item.getCanonicalPath());
-                        jsonChildOfItem.addProperty("name", childOfItem.getNameWithoutExtension());
-                        jsonChildOfItem.addProperty("isDirectory", true);
+                        propertiesOfChild.addProperty("canonicalPath", childOfItem.getCanonicalPath());
+                        propertiesOfChild.addProperty("parent", item.getCanonicalPath());
+                        propertiesOfChild.addProperty("name", childOfItem.getNameWithoutExtension());
+                        propertiesOfChild.addProperty("isDirectory", true);
                         jsonChildOfItem.add("children", new JsonArray());
+                        jsonChildOfItem.add("properties", propertiesOfChild);
                     } else {
-                        jsonChildOfItem.addProperty("canonicalPath", childOfItem.getCanonicalPath());
-                        jsonChildOfItem.addProperty("parent", item.getCanonicalPath());
-                        jsonChildOfItem.addProperty("name", childOfItem.getNameWithoutExtension());
-                        jsonChildOfItem.addProperty("isDirectory", false);
-                        jsonChildOfItem.addProperty("fileType", childOfItem.getFileType().getName());
+                        propertiesOfChild.addProperty("canonicalPath", childOfItem.getCanonicalPath());
+                        propertiesOfChild.addProperty("parent", item.getCanonicalPath());
+                        propertiesOfChild.addProperty("name", childOfItem.getNameWithoutExtension());
+                        propertiesOfChild.addProperty("isDirectory", false);
+                        propertiesOfChild.addProperty("fileType", childOfItem.getFileType().getName());
+                        jsonChildOfItem.add("properties", propertiesOfChild);
                         PsiFile psiFile = PsiManager.getInstance(project).findFile(childOfItem);
-                        jsonChildOfItem.addProperty("code", psiFile.getText());
-                        jsonChildOfItem.add("ast", generateASTAsJSON(psiFile));
+                        propertiesOfChild.addProperty("code", psiFile.getText());
+                        propertiesOfChild.add("ast", generateASTAsJSON(psiFile));
                     }
                     canonicalToJsonMap.get(item.getCanonicalPath()).get("children").getAsJsonArray().add(jsonChildOfItem);
                     canonicalToJsonMap.put(childOfItem.getCanonicalPath(), jsonChildOfItem);

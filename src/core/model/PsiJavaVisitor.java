@@ -20,6 +20,8 @@ public class PsiJavaVisitor implements TreeVisitor {
     @Override
     public void visit(PsiElement psiElement, JsonObject jsonNode){
 
+        // PsiReturnStatementImpl i = null;
+
         if(psiElement == null){
             return;
         }
@@ -28,10 +30,10 @@ public class PsiJavaVisitor implements TreeVisitor {
             return;
         }
 
-        // this was just to build the initial class hierarchy
-        /*if(true){
+        // SHOULD NOT USE UNLESS YOU ARE BUILDING THE PSI CLASS HIERARCHY IF INTELLIJ ISSUED SOME NEW FEATURES / UPDATES
+        if(PsiPreCompEngine.recomputePsiClassTable){
             PsiPreCompEngine.doStuff(psiElement);
-        }*/
+        }
 
         // take the new json object and give it an empty children array
         jsonNode.add("children", new JsonArray());
@@ -66,7 +68,6 @@ public class PsiJavaVisitor implements TreeVisitor {
 
         // customized properties that elements will have
         PropertyDescriptor[] propertyDescriptors = IntrospectionUtil.getProperties(element.getClass());
-        // System.out.println(element.getClass());
         for(PropertyDescriptor pd : propertyDescriptors){
             if(isClassAcceptable(pd.getPropertyType()) && isVariableAcceptable(pd.getName())) {
 

@@ -1,3 +1,4 @@
+// SHOULD NOT USE UNLESS YOU ARE BUILDING THE PSI CLASS HIERARCHY IF INTELLIJ ISSUED SOME NEW FEATURES / UPDATES
 package core.model;
 
 import com.google.gson.JsonArray;
@@ -33,37 +34,56 @@ public class PsiClassHierarchyBuilder implements TreeVisitor {
 
     public void processClass(Class clazz){
 
-        if(classTable.has(clazz.getName())){
+        String simpName = getSimpleName(clazz);
+
+        if(classTable.has(simpName)){
             return;
         }
 
         JsonObject val = new JsonObject();
         val.addProperty("name", clazz.getName());
-        val.addProperty("simpleName", clazz.getSimpleName());
-        classTable.add(clazz.getName(), val);
+        val.addProperty("simpleName", simpName);
+
+        classTable.add(simpName, val);
 
         if(clazz.isInterface()){
             val.addProperty("type", "interface");
             JsonArray imp = new JsonArray();
             for(Class i : clazz.getInterfaces()){
-                imp.add(i.getName());
+                imp.add(getSimpleName(i));
                 processClass(i);
             }
             val.add("extends", imp);
         }else{
             val.addProperty("type", "class");
             if(clazz.getSuperclass() != null) {
-                val.addProperty("extends", clazz.getSuperclass().getName());
+                val.addProperty("extends", getSimpleName(clazz.getSuperclass()));
                 processClass(clazz.getSuperclass());
             }
             JsonArray imp = new JsonArray();
             for(Class i : clazz.getInterfaces()){
-                imp.add(i.getName());
+                imp.add(getSimpleName(i));
                 processClass(i);
             }
             val.add("implements", imp);
         }
 
+    }
+
+    public String getSimpleName(Class clazz){
+        if(clazz.getSimpleName().equals("Stub")){
+            return getStubName(clazz);
+        }else{
+            return clazz.getSimpleName();
+        }
+    }
+
+    public String getStubName(Class clazz){
+        Class sup = clazz.getSuperclass();
+        if(sup != null){
+            return sup.getSimpleName() + "$" + "Stub";
+        }
+        return "";
     }
 
     public boolean isIgnorePsiElement(PsiElement element){

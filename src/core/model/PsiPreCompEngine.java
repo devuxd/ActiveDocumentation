@@ -5,12 +5,20 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.source.PsiTypeElementImpl;
 import com.intellij.psi.impl.source.tree.java.PsiDeclarationStatementImpl;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 /**
  * Created by User on 7/19/2016.
+ * Change the variable recomputePsiClassTable if you want to recompute the PSI class table
+ * Should only be used with the special project
+ * Normally should be false
  */
 public class PsiPreCompEngine {
 
     public static JsonObject ct = new JsonObject();
+    public static boolean recomputePsiClassTable = false;
 
     public static void doStuff(PsiElement element){
         if(element.getContainingFile().getName().contains("TWF")){
