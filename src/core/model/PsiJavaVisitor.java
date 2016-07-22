@@ -35,6 +35,8 @@ public class PsiJavaVisitor implements TreeVisitor {
             PsiPreCompEngine.doStuff(psiElement);
         }
 
+        ProjectClassBuilderEngine.doStuff(psiElement);
+
         // take the new json object and give it an empty children array
         jsonNode.add("children", new JsonArray());
         jsonNode.add("properties", extractData(psiElement));

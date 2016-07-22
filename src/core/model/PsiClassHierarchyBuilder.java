@@ -3,10 +3,11 @@ package core.model;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiWhiteSpace;
+import com.intellij.psi.*;
+import com.intellij.psi.impl.source.tree.java.PsiIdentifierImpl;
+import com.intellij.psi.util.PsiUtil;
 
-public class PsiClassHierarchyBuilder implements TreeVisitor {
+public class PsiClassHierarchyBuilder {
 
     private JsonObject classTable;
 
@@ -14,28 +15,11 @@ public class PsiClassHierarchyBuilder implements TreeVisitor {
         classTable = cTable;
     }
 
-    @Override
-    public void visit(PsiElement psiElement, JsonObject jsonNode) {
-
-        if(psiElement == null){
-            return;
-        }
-
-        if(isIgnorePsiElement(psiElement)){
-            return;
-        }
-
-        processClass(psiElement.getClass());
-
-        for(PsiElement child : psiElement.getChildren()){
-            visit(child, new JsonObject());
-        }
-    }
-
     public void processClass(Class clazz){
 
         String simpName = getSimpleName(clazz);
 
+        ////////////////
         if(classTable.has(simpName)){
             return;
         }

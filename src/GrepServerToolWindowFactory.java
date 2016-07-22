@@ -7,24 +7,20 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.psi.*;
+import core.model.ProjectClassBuilderEngine;
 import core.model.PsiClassHierarchyBuilder;
 import core.model.PsiJavaVisitor;
 import core.model.PsiPreCompEngine;
 import org.java_websocket.WebSocketImpl;
 import org.jetbrains.annotations.NotNull;
 
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.URI;
 import java.util.*;
 import java.util.List;
 
-/**
- * Created by User on 7/8/2016.
- */
 public class GrepServerToolWindowFactory implements ToolWindowFactory {
 
     private JScrollPane pane;
@@ -65,11 +61,9 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
                     WebSocketImpl.DEBUG = false;
                     int port = 8887; // 843 flash policy port
                     s = new ChatServer(port, MessageProcessor.encodeData(new Object[]{"IDEA", "WEB", "INITIAL_PROJECT_HIERARCHY", generateProjectHierarchyAsJSON()}).toString());
-                    if(PsiPreCompEngine.recomputePsiClassTable){
-                        generatePSIClassTable();
-                    }
                     s.start();
                     System.out.println();
+                    System.out.println(ProjectClassBuilderEngine.ct);
                     // s.sendToAll(MessageProcessor.encodeData(new Object[]{"IDEA", "WEB", "INITIAL_PSI_CLASS_TABLE", ct}).toString());
                     System.out.println("ChatServer started on port: " + s.getPort());
                 } catch (Exception e) {
@@ -84,42 +78,10 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
         FileChangeManager fcm = new FileChangeManager(s);
         fcm.initComponent();
 
-        // System.out.println(generateASTAsJSON(PsiDocumentManager.getInstance(project).getPsiFile(FileEditorManager.getInstance(project).getSelectedTextEditor().getDocument())).toString());
-
     }
 
     // SHOULD NOT USE UNLESS YOU ARE BUILDING THE PSI CLASS HIERARCHY IF INTELLIJ ISSUED SOME NEW FEATURES / UPDATES
-    public static JsonObject generatePSIClassTable(){
 
-        // start off with root
-        Project project = ProjectManager.getInstance().getOpenProjects()[0];
-        VirtualFile rootDirectoryVirtualFile = project.getBaseDir();
-        JsonObject classTable = new JsonObject();
-        PsiClassHierarchyBuilder classBuilder = new PsiClassHierarchyBuilder(classTable);
-
-        // set up queue
-        java.util.List<VirtualFile> q = new ArrayList<VirtualFile>();
-        q.add(rootDirectoryVirtualFile);
-
-        // traverse the queue
-        while (!q.isEmpty()) {
-            ArrayList<VirtualFile> new_q = new ArrayList<VirtualFile>();
-            for (VirtualFile item : q) {
-
-                PsiFile psiFile = PsiManager.getInstance(project).findFile(item);
-                if(psiFile instanceof PsiJavaFile){
-                    classBuilder.visit(psiFile, new JsonObject());
-                }
-
-                for (VirtualFile childOfItem : item.getChildren()) {
-                    new_q.add(childOfItem);
-                }
-            }
-            q = new_q;
-        }
-        System.out.println(classTable);
-        return classTable;
-    }
 
     public static JsonObject generateJavaASTAsJSON(PsiJavaFile psiJavaFile) {
 

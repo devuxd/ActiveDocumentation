@@ -221,6 +221,7 @@ function getFile(fileName, fileType){
 	return projectHierarchyFindFirstDFS(foo, false);
 }
 
+// for testing methods above
 function maniptest(){
 	
 	console.log("------------------");
