@@ -11,16 +11,17 @@ public class ProjectClassHierarchyBuilder {
 
     private JsonObject classTable;
 
-    public ProjectClassHierarchyBuilder(JsonObject cTable){
+    public ProjectClassHierarchyBuilder(JsonObject cTable) {
         classTable = cTable;
     }
 
-    public void processClass(PsiClass clazz){
-        String simpName = clazz.getName();
+    public void processClass(PsiClass clazz) {
 
-        if(classTable.has(clazz.getQualifiedName())){
+        if (classTable.has(clazz.getQualifiedName())) {
             return;
         }
+
+        String simpName = clazz.getName();
 
         JsonObject val = new JsonObject();
         val.addProperty("name", clazz.getQualifiedName());
@@ -28,25 +29,25 @@ public class ProjectClassHierarchyBuilder {
 
         classTable.add(clazz.getQualifiedName(), val);
 
-        if(clazz.isInterface()){
+        if (clazz.isInterface()) {
             val.addProperty("type", "interface");
             JsonArray imp = new JsonArray();
-            for(PsiClass i : clazz.getInterfaces()){
-                if(i != null && i.getQualifiedName() != null) {
+            for (PsiClass i : clazz.getInterfaces()) {
+                if (i != null && i.getQualifiedName() != null) {
                     imp.add(i.getQualifiedName());
                     processClass(i);
                 }
             }
             val.add("extends", imp);
-        }else{
+        } else {
             val.addProperty("type", "class");
-            if(clazz.getSuperClass() != null) {
+            if (clazz.getSuperClass() != null) {
                 val.addProperty("extends", clazz.getSuperClass().getQualifiedName());
                 processClass(clazz.getSuperClass());
             }
             JsonArray imp = new JsonArray();
-            for(PsiClass i : clazz.getInterfaces()){
-                if(i != null && i.getQualifiedName() != null) {
+            for (PsiClass i : clazz.getInterfaces()) {
+                if (i != null && i.getQualifiedName() != null) {
                     imp.add(i.getQualifiedName());
                     processClass(i);
                 }
@@ -56,14 +57,13 @@ public class ProjectClassHierarchyBuilder {
 
     }
 
-    public void processClass(Class clazz){
+    public void processClass(Class clazz) {
 
-        String simpName = clazz.getSimpleName();
-
-        ////////////////
-        if(classTable.has(clazz.getCanonicalName())){
+        if (classTable.has(clazz.getCanonicalName())) {
             return;
         }
+
+        String simpName = clazz.getSimpleName();
 
         JsonObject val = new JsonObject();
         val.addProperty("name", clazz.getCanonicalName());
@@ -71,22 +71,22 @@ public class ProjectClassHierarchyBuilder {
 
         classTable.add(clazz.getCanonicalName(), val);
 
-        if(clazz.isInterface()){
+        if (clazz.isInterface()) {
             val.addProperty("type", "interface");
             JsonArray imp = new JsonArray();
-            for(Class i : clazz.getInterfaces()){
+            for (Class i : clazz.getInterfaces()) {
                 imp.add(i.getCanonicalName());
                 processClass(i);
             }
             val.add("extends", imp);
-        }else{
+        } else {
             val.addProperty("type", "class");
-            if(clazz.getSuperclass() != null) {
+            if (clazz.getSuperclass() != null) {
                 val.addProperty("extends", clazz.getSuperclass().getCanonicalName());
                 processClass(clazz.getSuperclass());
             }
             JsonArray imp = new JsonArray();
-            for(Class i : clazz.getInterfaces()){
+            for (Class i : clazz.getInterfaces()) {
                 imp.add(i.getCanonicalName());
                 processClass(i);
             }

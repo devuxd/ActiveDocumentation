@@ -15,12 +15,15 @@ function countUniqueKeys(){
 // returns true if the class c1 is a decendent of class c2
 // note: if c1 == c2, then psiInstanceOf will return true
 function psiInstanceOf(c1, c2){
+	console.log("psiInstanceOf");
 	var mySet = new Set();
 	return psiInstanceOfAux(c1, c2, mySet);
 }
 
 // auxiliary function for psiInstanceOf
 function psiInstanceOfAux(c1, c2, visited){
+
+	console.log("psiInstanceOfAux");
 
 	// console.log(c1 + " | " + c2);
 

@@ -28,6 +28,7 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
     private JButton button;
     private ChatServer s;
     private static List<VirtualFile> ignoredFilesList = null;
+    private static JsonObject initialClassTable = new JsonObject();
 
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
@@ -63,7 +64,8 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
                     s = new ChatServer(port, MessageProcessor.encodeData(new Object[]{"IDEA", "WEB", "INITIAL_PROJECT_HIERARCHY", generateProjectHierarchyAsJSON()}).toString());
                     s.start();
                     System.out.println();
-                    System.out.println(ProjectClassBuilderEngine.ct);
+                    System.out.println(initialClassTable);
+                    s.sendToAll(MessageProcessor.encodeData(new Object[]{"IDEA", "WEB", "INITIAL_PROJECT_CLASS_TABLE", initialClassTable}).toString());
                     // s.sendToAll(MessageProcessor.encodeData(new Object[]{"IDEA", "WEB", "INITIAL_PSI_CLASS_TABLE", ct}).toString());
                     System.out.println("ChatServer started on port: " + s.getPort());
                 } catch (Exception e) {
@@ -86,9 +88,11 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
     public static JsonObject generateJavaASTAsJSON(PsiJavaFile psiJavaFile) {
 
         JsonObject root = new JsonObject();
-        PsiJavaVisitor pjv = new PsiJavaVisitor();
+        PsiJavaVisitor pjv = new PsiJavaVisitor(initialClassTable);
         pjv.visit(psiJavaFile, root);
-        System.out.println(PsiPreCompEngine.ct);
+        if (PsiPreCompEngine.recomputePsiClassTable) {
+            System.out.println(PsiPreCompEngine.ct);
+        }
         return root;
 
     }
@@ -132,12 +136,12 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
             java.util.List<VirtualFile> new_q = new ArrayList<VirtualFile>();
             for (VirtualFile item : q) {
                 // System.out.println(item.getName());
-                if(shouldIgnoreFile(item)){
+                if (shouldIgnoreFile(item)) {
                     continue;
                 }
                 System.out.println("Included: " + item.getCanonicalPath());
                 for (VirtualFile childOfItem : item.getChildren()) {
-                    if(shouldIgnoreFile(childOfItem)){
+                    if (shouldIgnoreFile(childOfItem)) {
                         continue;
                     }
                     new_q.add(childOfItem);
@@ -173,14 +177,14 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
 
     }
 
-    public static boolean shouldIgnoreFile(VirtualFile s){
-        if(ignoredFilesList == null){
+    public static boolean shouldIgnoreFile(VirtualFile s) {
+        if (ignoredFilesList == null) {
             return false;
         }
-        for(VirtualFile vfile : ignoredFilesList){
-            if(vfile.getCanonicalPath().equals(s.getCanonicalPath())){
+        for (VirtualFile vfile : ignoredFilesList) {
+            if (vfile.getCanonicalPath().equals(s.getCanonicalPath())) {
                 return true;
-            }else if(isFileAChildOf(s, vfile)){
+            } else if (isFileAChildOf(s, vfile)) {
                 return true;
             }
         }
@@ -188,8 +192,7 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
         return false;
     }
 
-     public static boolean isFileAChildOf(VirtualFile maybeChild, VirtualFile possibleParent)
-    {
+    public static boolean isFileAChildOf(VirtualFile maybeChild, VirtualFile possibleParent) {
         final VirtualFile parent = possibleParent.getCanonicalFile();
         if (!parent.exists() || !parent.isDirectory()) {
             // this cannot possibly be the parent
@@ -208,7 +211,7 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
     }
 
 
-    public static List<VirtualFile> getIgnoredFilesList(VirtualFile bDir){
+    public static List<VirtualFile> getIgnoredFilesList(VirtualFile bDir) {
 
         List<String> list = new ArrayList<>();
         list.add(".idea");
@@ -216,9 +219,9 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
 
         List<VirtualFile> set = new ArrayList<>();
 
-        for(String item : list){
+        for (String item : list) {
             VirtualFile vfile = bDir.findFileByRelativePath(item);
-            if(vfile != null) {
+            if (vfile != null) {
                 set.add(vfile);
             }
         }

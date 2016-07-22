@@ -3,6 +3,8 @@
 // walk across the tree and execute commands on each node (DFS)
 function astTreeWalk(node, func){
 
+	console.log("astTreeWalk");
+
 	// function used to process the node's properties
 	func(node);
 
@@ -21,6 +23,8 @@ function astTreeWalk(node, func){
 // return the first node that matches a criteria indicated by func (DFS)
 // if match cant be found, then function returns null
 function astTreeFindFirstDFS(node, func){
+
+	console.log("astTreeFindFirstDFS");
 
 	if(func(node)){
 		return node;
@@ -44,6 +48,8 @@ function astTreeFindFirstDFS(node, func){
 // return a list of all nodes that match a criteria indicated by func (DFS)
 function astTreeFindAll(root, func){
 
+	console.log("astTreeFindAll");
+
 	var list = [];
 	astTreeFindAllAux(root, func, list);
 	return list;
@@ -52,6 +58,8 @@ function astTreeFindAll(root, func){
 
 function astTreeFindAllAux(node, func, list){
 
+
+	console.log("astTreeFindAllAux");
 	// console.log(node);
 
 	// if criteria matches, add node to list
@@ -72,6 +80,8 @@ function astTreeFindAllAux(node, func, list){
 
 // add properties to everything including project hierarchy and ASTs
 function addParentPropertyToNodes(root){
+
+	console.log("addParentPropertyToNodes");
 	var setParent = function(o){
     	var i;
     	if(!o.hasOwnProperty("children")){
@@ -86,6 +96,7 @@ function addParentPropertyToNodes(root){
 }
 
 function getAllFilesOfType(fileType){
+	console.log("getAllFilesOfType");
 
 	var foo = function(o){
 		if(!o.hasOwnProperty("properties")){
@@ -110,7 +121,7 @@ function getAllFilesOfType(fileType){
 // arguments include node, the function to perform on the node
 // and whether or not to have the explorer go into the ASTs
 function projectHierarchyTreeWalk(node, func, examineASTs){
-
+	console.log("projectHierarchyTreeWalk");
 	// overloaded so that user starts at root if node is not provided
 	if(arguments.length == 2){
 		projectHierarchyTreeWalk(projectHierarchy, node, func); // args translated
@@ -138,7 +149,7 @@ function projectHierarchyTreeWalk(node, func, examineASTs){
 }
 
 function projectHierarchyFindFirstDFS(node, func, examineASTs){
-
+	console.log("projectHierarchyFindFirstDFS");
 	if(arguments.length == 2){
 		return projectHierarchyFindFirstDFS(projectHierarchy, node, func);
 	}
@@ -169,6 +180,7 @@ function projectHierarchyFindFirstDFS(node, func, examineASTs){
 }
 
 function projectHierarchyFindAll(root, func, examineASTs){
+	console.log("projectHierarchyFindAll");
 	var list = [];
 	if(arguments.length == 2){
 		projectHierarchyFindAllAux(projectHierarchy, root, func, list);
@@ -179,7 +191,7 @@ function projectHierarchyFindAll(root, func, examineASTs){
 }
 
 function projectHierarchyFindAllAux(node, func, examineASTs, list){
-
+	console.log("projectHierarchyFindAllAux");
 	// if criteria matches, add node to list
 	if(func(node)){
 		list.push(node);
@@ -203,6 +215,7 @@ function projectHierarchyFindAllAux(node, func, examineASTs, list){
 }
 
 function getFile(fileName, fileType){
+	console.log("getFile");
 	var foo = function(o){
 		if(!o.hasOwnProperty("properties")){
 			return false;
@@ -223,6 +236,8 @@ function getFile(fileName, fileType){
 
 // for testing methods above
 function maniptest(){
+
+	console.log("maniptest");
 	
 	console.log("------------------");
 
@@ -297,5 +312,58 @@ function maniptest(){
 	console.log("------------------");
 
 	console.log(getAllFilesOfType("JAVA"));
+
+}
+
+function instanceOf(c1, c2){
+	console.log("instanceOf");
+	var mySet = new Set();
+	return instanceOfAux(c1, c2, mySet);
+}
+
+// auxiliary function for psiInstanceOf
+function instanceOfAux(c1, c2, visited){
+
+	console.log("instanceOfAux");
+
+	// console.log(c1 + " | " + c2);
+
+	if(c1 in visited){
+		return false;
+	}
+	visited.add(c1);
+
+	if(c1 === c2){
+		return true;
+	}
+
+
+	if(projectClassTable[c1]["type"] === "interface"){
+
+		var i;
+		for(i = 0; i < projectClassTable[c1]["extends"].length; i++){
+			// console.log("\t" + projectClassTable[c1]["extends"][i]);
+			if(instanceOfAux(projectClassTable[c1]["extends"][i], c2, visited)){
+				return true;
+			}
+		}
+
+	}else if(projectClassTable[c1]["type"] === "class"){
+
+		if(projectClassTable[c1].hasOwnProperty("extends") && instanceOfAux(projectClassTable[c1]["extends"], c2, visited)){
+			return true;
+		}
+
+
+		var i;
+		for(i = 0; i < projectClassTable[c1]["implements"].length; i++){
+			if(instanceOfAux(projectClassTable[c1]["implements"][i], c2, visited)){
+				return true;
+			}
+		}
+
+	}
+
+	return false;
 
 }

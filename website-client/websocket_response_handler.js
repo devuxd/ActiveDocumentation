@@ -1,4 +1,5 @@
 var projectHierarchy = null;
+var projectClassTable = null;
 
 document.observe("dom:loaded", function() {
     function log(text) {
@@ -18,47 +19,69 @@ document.observe("dom:loaded", function() {
             log("[WebSocket#onopen]\n");
         }
         ws.onmessage = function(e) {
-            // log("[WebSocket#onmessage] Message: '" + e.data + "'\n"); // CONTROLS WHETHER MESSAGES ARE DISPLAYED OR NOT
+            // log("[WebSocket#onmessage] Message: '" + e.data + "'\n"); // CONTROLS WHETHER MESSAGES ARE DISPLAYED OR NOT\
             var message = JSON.parse(e.data);
+            console.log(message.command);
             if(message.command === "INITIAL_PROJECT_HIERARCHY"){
                 projectHierarchy = message.data;
                 addParentPropertyToNodes(projectHierarchy);
                 console.log("initial project hierarchy added");
             }else if(message.command === "UPDATE_CODE_IN_FILE"){
+            
                 var messageInfo = message.data;
+                // console.log("1");
                 var targetFileName = messageInfo.canonicalPath;
+                // console.log("2");
                 var curr = projectHierarchy;
+                // console.log("3");
                 
-                while(!(curr.canonicalPath === targetFileName)){
+                while(!(curr.properties.canonicalPath === targetFileName)){
                     
                     var i;
                     for(i = 0; i < curr.children.length; i++){
-                        if(targetFileName.startsWith(curr.children[i].canonicalPath)){
+                        if(targetFileName.startsWith(curr.children[i].properties.canonicalPath)){
                             curr = curr.children[i];
                             break;
                         }
                     }
                 }
 
-                curr.code = messageInfo.code;
-                curr.ast = messageInfo.ast;
-                console.log("Code updated in " + curr.canonicalPath);
+                curr.properties.code = messageInfo.code;
+                curr.properties.ast = messageInfo.ast;
+                console.log("Code updated in " + curr.properties.canonicalPath);
                 // ?
+
+            }else if(message.command === "INITIAL_PROJECT_CLASS_TABLE"){
+                projectClassTable = message.data;
+                console.log("Added initial project class table.");
+
+            }else if(message.command === "UPDATE_PROJECT_CLASS_TABLE"){ //
+                var newClassTable = message.data;
+
+                var property;
+                for (property in newClassTable) {
+                    if (newClassTable.hasOwnProperty(property)) {
+                        // console.log(property);
+                        projectClassTable[property] = newClassTable[property];
+                    }
+                }
+
+                console.log("Updated project class table.");
 
             }else if(message.command === "DELETE_FILE"){
 
                 var messageInfo = message.data;
-                var targetFileName = messageInfo.canonicalPath;
+                var targetFileName = messageInfo.properties.canonicalPath;
                 var curr = projectHierarchy;
                 
-                while(curr != null && !(curr.canonicalPath === targetFileName)){
+                while(curr != null && !(curr.properties.canonicalPath === targetFileName)){
                     var i;
                     for(i = 0; i < curr.children.length; i++){
-                        if(targetFileName === curr.children[i].canonicalPath){
+                        if(targetFileName === curr.children[i].properties.canonicalPath){
                             curr.children.splice(i, 1);
                             curr = null;
                             break;
-                        }else if(targetFileName.startsWith(curr.children[i].canonicalPath)){
+                        }else if(targetFileName.startsWith(curr.children[i].properties.canonicalPath)){
                             curr = curr.children[i];
                             break;
                         }
@@ -70,22 +93,22 @@ document.observe("dom:loaded", function() {
             }else if(message.command === "RENAME_FILE"){
 
                 var messageInfo = message.data;
-                var targetFileName = messageInfo.oldCanonicalPath;
+                var targetFileName = messageInfo.properties.oldCanonicalPath;
                 var curr = projectHierarchy;
                 
-                while(!(curr.canonicalPath === targetFileName)){
+                while(!(curr.properties.canonicalPath === targetFileName)){
                     var i;
                     for(i = 0; i < curr.children.length; i++){
-                        if(targetFileName.startsWith(curr.children[i].canonicalPath)){
+                        if(targetFileName.startsWith(curr.children[i].properties.canonicalPath)){
                             curr = curr.children[i];
                             break;
                         }
                     }
                 }
 
-                curr.name = messageInfo.name;
-                curr.canonicalPath = messageInfo.newCanonicalPath;
-                console.log("Renamed " + targetFileName + " to " + curr.canonicalPath);
+                curr.properties.name = messageInfo.name;
+                curr.properties.canonicalPath = messageInfo.newCanonicalPath;
+                console.log("Renamed " + targetFileName + " to " + curr.properties.canonicalPath);
 
             }else if(message.command === "CREATE_FILE"){
 
@@ -93,11 +116,11 @@ document.observe("dom:loaded", function() {
                 var targetFileName = messageInfo.parent;
                 var curr = projectHierarchy;
                 
-                while(!(curr.canonicalPath === targetFileName)){
-                    console.log(curr.canonicalPath);
+                while(!(curr.properties.canonicalPath === targetFileName)){
+                    console.log(curr.properties.canonicalPath);
                     var i;
                     for(i = 0; i < curr.children.length; i++){
-                        if(targetFileName.startsWith(curr.children[i].canonicalPath)){
+                        if(targetFileName.startsWith(curr.children[i].properties.canonicalPath)){
                             curr = curr.children[i];
                             break;
                         }
