@@ -7,8 +7,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.psi.*;
-import core.model.ProjectClassBuilderEngine;
-import core.model.PsiClassHierarchyBuilder;
 import core.model.PsiJavaVisitor;
 import core.model.PsiPreCompEngine;
 import org.java_websocket.WebSocketImpl;
@@ -80,6 +78,12 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
         FileChangeManager fcm = new FileChangeManager(s);
         fcm.initComponent();
 
+        ArrayList<ArrayList> a11 = new ArrayList<ArrayList>();
+        ArrayList<List> a22 = new ArrayList<List>();
+        String a33 = "";
+        Object a44 = new Object();
+        System.out.println(a11.getClass().isInstance(a22.getClass()));
+        System.out.println(a33.getClass().isInstance(a44.getClass()));
     }
 
     // SHOULD NOT USE UNLESS YOU ARE BUILDING THE PSI CLASS HIERARCHY IF INTELLIJ ISSUED SOME NEW FEATURES / UPDATES

@@ -7,6 +7,9 @@ import com.google.gson.JsonObject;
 
 import com.intellij.psi.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ProjectClassHierarchyBuilder {
 
     private JsonObject classTable;
@@ -29,6 +32,21 @@ public class ProjectClassHierarchyBuilder {
 
         classTable.add(clazz.getQualifiedName(), val);
 
+        // find the PsiModifierList
+        List<String> anList = new ArrayList<>();
+        for(PsiAnnotation an : clazz.getModifierList().getAnnotations()){
+            if(an.getText().trim().startsWith("@")){
+                anList.add(an.getText().trim());
+            }
+        }
+        if(anList.size() > 0){
+            val.add("annotations", new JsonArray());
+            for(String anString : anList){
+                val.get("annotations").getAsJsonArray().add(anString);
+            }
+        }
+
+        // get info based on whether class is a class or interface
         if (clazz.isInterface()) {
             val.addProperty("type", "interface");
             JsonArray imp = new JsonArray();

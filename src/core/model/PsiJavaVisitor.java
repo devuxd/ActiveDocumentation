@@ -5,11 +5,16 @@ package core.model;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.intellij.psi.*;
+import com.intellij.psi.util.PsiUtil;
+import com.intellij.util.xml.AnnotatedElement;
+import com.siyeh.ig.maturity.SystemOutErrInspection;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import java.beans.PropertyDescriptor;
 import java.util.HashSet;
+import java.util.List;
 
 
 public class PsiJavaVisitor implements TreeVisitor {
@@ -76,6 +81,36 @@ public class PsiJavaVisitor implements TreeVisitor {
         String specialType = ProjectClassBuilderEngine.getTypeOfImportantElements(element);
         if(specialType != null){
             properties.addProperty("type", specialType);
+            if(!projectClassTable.has(specialType)){
+                projectClassBuilderEngine.doStuff(element);
+            }
+        }
+
+        // check annotations
+        if(element instanceof PsiAnnotationOwner){
+            System.out.println("---------Annotate----------");
+            System.out.println(element.getParent());
+            System.out.println(element);
+            List<String> li = new ArrayList<>();
+            for(PsiAnnotation pa : (((PsiAnnotationOwner) element).getAnnotations())){
+                if(pa.getText().trim().startsWith("@")) {
+                    System.out.println("\t => " + pa.getText());
+                    li.add(pa.getText().trim());
+                }
+            }
+            if(li.size() > 0) {
+                JsonObject parJsonProp = map.get(element.getParent()).get("properties").getAsJsonObject();
+                parJsonProp.add("annotations", new JsonArray());
+                for(String s : li) {
+                    parJsonProp.get("annotations").getAsJsonArray().add(s);
+                }
+            }
+
+            if(element.getParent() instanceof PsiClass){
+
+            }
+
+            System.out.println("-------------------");
         }
 
         // customized properties that elements will have
