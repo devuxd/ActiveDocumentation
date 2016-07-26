@@ -3,7 +3,7 @@
 // walk across the tree and execute commands on each node (DFS)
 function astTreeWalk(node, func){
 
-	console.log("astTreeWalk");
+	// console.log("astTreeWalk");
 
 	// function used to process the node's properties
 	func(node);
@@ -24,7 +24,7 @@ function astTreeWalk(node, func){
 // if match cant be found, then function returns null
 function astTreeFindFirstDFS(node, func){
 
-	console.log("astTreeFindFirstDFS");
+	// console.log("astTreeFindFirstDFS");
 
 	if(func(node)){
 		return node;
@@ -48,7 +48,7 @@ function astTreeFindFirstDFS(node, func){
 // return a list of all nodes that match a criteria indicated by func (DFS)
 function astTreeFindAll(root, func){
 
-	console.log("astTreeFindAll");
+	// console.log("astTreeFindAll");
 
 	var list = [];
 	astTreeFindAllAux(root, func, list);
@@ -59,8 +59,7 @@ function astTreeFindAll(root, func){
 function astTreeFindAllAux(node, func, list){
 
 
-	console.log("astTreeFindAllAux");
-	// console.log(node);
+	// console.log("astTreeFindAllAux");
 
 	// if criteria matches, add node to list
 	if(func(node)){
@@ -81,22 +80,24 @@ function astTreeFindAllAux(node, func, list){
 // add properties to everything including project hierarchy and ASTs
 function addParentPropertyToNodes(root){
 
-	console.log("addParentPropertyToNodes");
+	// console.log("addParentPropertyToNodes");
 	var setParent = function(o){
     	var i;
-    	if(!o.hasOwnProperty("children")){
-			return;
+    	if(o.hasOwnProperty("children")){
+    		for(i = 0; i < o["children"].length; i++){
+				o["children"][i].properties.parent = o;
+				setParent(o["children"][i]);
+			}
+		}else if(o.hasOwnProperty("properties") && o.properties.hasOwnProperty("ast")){
+			setParent(o.properties.ast);
 		}
-		for(i = 0; i < o["children"].length; i++){
-			o["children"][i].properties.parent = o;
-			setParent(o["children"][i]);
-		}
+		
 	}
 	setParent(root);
 }
 
 function getAllFilesOfType(fileType){
-	console.log("getAllFilesOfType");
+	// console.log("getAllFilesOfType");
 
 	var foo = function(o){
 		if(!o.hasOwnProperty("properties")){
@@ -121,7 +122,7 @@ function getAllFilesOfType(fileType){
 // arguments include node, the function to perform on the node
 // and whether or not to have the explorer go into the ASTs
 function projectHierarchyTreeWalk(node, func, examineASTs){
-	console.log("projectHierarchyTreeWalk");
+	// console.log("projectHierarchyTreeWalk");
 	// overloaded so that user starts at root if node is not provided
 	if(arguments.length == 2){
 		projectHierarchyTreeWalk(projectHierarchy, node, func); // args translated
@@ -149,7 +150,7 @@ function projectHierarchyTreeWalk(node, func, examineASTs){
 }
 
 function projectHierarchyFindFirstDFS(node, func, examineASTs){
-	console.log("projectHierarchyFindFirstDFS");
+	// console.log("projectHierarchyFindFirstDFS");
 	if(arguments.length == 2){
 		return projectHierarchyFindFirstDFS(projectHierarchy, node, func);
 	}
@@ -180,7 +181,7 @@ function projectHierarchyFindFirstDFS(node, func, examineASTs){
 }
 
 function projectHierarchyFindAll(root, func, examineASTs){
-	console.log("projectHierarchyFindAll");
+	// console.log("projectHierarchyFindAll");
 	var list = [];
 	if(arguments.length == 2){
 		projectHierarchyFindAllAux(projectHierarchy, root, func, list);
@@ -191,7 +192,7 @@ function projectHierarchyFindAll(root, func, examineASTs){
 }
 
 function projectHierarchyFindAllAux(node, func, examineASTs, list){
-	console.log("projectHierarchyFindAllAux");
+	// console.log("projectHierarchyFindAllAux");
 	// if criteria matches, add node to list
 	if(func(node)){
 		list.push(node);
@@ -215,7 +216,7 @@ function projectHierarchyFindAllAux(node, func, examineASTs, list){
 }
 
 function getFile(fileName, fileType){
-	console.log("getFile");
+	// console.log("getFile");
 	var foo = function(o){
 		if(!o.hasOwnProperty("properties")){
 			return false;
@@ -234,89 +235,8 @@ function getFile(fileName, fileType){
 	return projectHierarchyFindFirstDFS(foo, false);
 }
 
-// for testing methods above
-function maniptest(){
-
-	console.log("maniptest");
-	
-	console.log("------------------");
-
-	astTreeWalk(getFile("Farm", "JAVA").properties.ast, function(n){
-		if(!n.properties.hasOwnProperty("type")){
-			return;
-		}
-		if(psiInstanceOf(n.properties.type, "PsiMethod")){
-			console.log(n.properties.name);
-		}
-	});
-	
-	console.log("------------------");
-
-	console.log(astTreeFindFirstDFS(getFile("Farm", "JAVA").properties.ast, function(n){
-		if(!n.properties.hasOwnProperty("type")){
-			return false;
-		}
-		if(psiInstanceOf(n.properties.type, "PsiMethod")){
-			// console.log(n.properties.name);
-			return true;
-		}
-		return false;
-	}));
-
-	console.log("------------------");
-
-	console.log(astTreeFindAll(getFile("Goose", "JAVA").properties.ast, function(n){
-			if(!n.properties.hasOwnProperty("type")){
-				return false;
-			}
-			if(psiInstanceOf(n.properties.type, "PsiMethod")){
-				return true;
-			}
-			return false;
-		}));
-
-	console.log("------------------");
-
-	projectHierarchyTreeWalk(function(n){
-		console.log(n);
-	}, false);
-
-	console.log("------------------");
-
-	console.log(projectHierarchyFindFirstDFS(function(o){
-		if(!o["properties"].hasOwnProperty("fileType")){
-			return false;
-		}
-		if(o["properties"]["fileType"].toUpperCase() === "JAVA"){
-			return true;
-		}
-		return false;
-	}, false));
-
-	console.log("------------------");
-
-	console.log(projectHierarchyFindAll(function(o){
-		if(!o["properties"].hasOwnProperty("fileType")){
-			return false;
-		}
-		if(o["properties"]["fileType"].toUpperCase() === "JAVA"){
-			return true;
-		}
-		return false;
-	}, false));
-
-	console.log("------------------");
-
-	console.log(getFile("Goose", "JAVA"));
-
-	console.log("------------------");
-
-	console.log(getAllFilesOfType("JAVA"));
-
-}
-
 function instanceOf(c1, c2){
-	console.log("instanceOf");
+	// console.log("instanceOf");
 	var mySet = new Set();
 	return instanceOfAux(c1, c2, mySet);
 }
@@ -324,7 +244,7 @@ function instanceOf(c1, c2){
 // auxiliary function for psiInstanceOf
 function instanceOfAux(c1, c2, visited){
 
-	console.log("instanceOfAux");
+	// console.log("instanceOfAux");
 
 	// console.log(c1 + " | " + c2);
 
@@ -342,7 +262,6 @@ function instanceOfAux(c1, c2, visited){
 
 		var i;
 		for(i = 0; i < projectClassTable[c1]["extends"].length; i++){
-			// console.log("\t" + projectClassTable[c1]["extends"][i]);
 			if(instanceOfAux(projectClassTable[c1]["extends"][i], c2, visited)){
 				return true;
 			}

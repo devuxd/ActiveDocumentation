@@ -1,9 +1,14 @@
 package core.model;
 
 import com.google.gson.JsonObject;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.source.PsiTypeElementImpl;
 import com.intellij.psi.impl.source.tree.java.PsiDeclarationStatementImpl;
+import com.intellij.psi.search.GlobalSearchScope;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -21,6 +26,7 @@ public class PsiPreCompEngine {
     public static boolean recomputePsiClassTable = false;
 
     public static void doStuff(PsiElement element){
+
         if(element.getContainingFile().getName().contains("TWF")){
             if(element instanceof PsiDeclarationStatementImpl){
                 PsiDeclarationStatementImpl pdsi = (PsiDeclarationStatementImpl) element;
@@ -28,16 +34,17 @@ public class PsiPreCompEngine {
                 Object x = pdsi.getFirstChild().getChildren()[1];
                 if(x instanceof PsiTypeElementImpl){
                     PsiTypeElementImpl y = (PsiTypeElementImpl) x;
-                    System.out.println("\t"+y.getText());
-                    System.out.println("\t"+y.getType().toString());
+                    // System.out.println("\t"+y.getText());
+                    // System.out.println("\t"+y.getType().toString());
                     String canText = y.getType().getCanonicalText();
 
                     PsiClassHierarchyBuilder psiClassHierarchyBuilder = new PsiClassHierarchyBuilder(ct);
                     Class clazz;
                     try{
+                        getClass(canText);
                         clazz = Class.forName(canText);
-                        System.out.println("\tCanText: " + canText);
-                        System.out.println("\t"+Class.forName(canText));
+                        // System.out.println("\tCanText: " + canText);
+                        // System.out.println("\t"+Class.forName(canText));
                     } catch (ClassNotFoundException e) {
                         clazz = null;
                     }
@@ -49,5 +56,14 @@ public class PsiPreCompEngine {
                 }
             }
         }
+    }
+
+    public static PsiClass getClass(String q) {
+
+        Project p = ProjectManager.getInstance().getOpenProjects()[0];
+        JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(p);
+        PsiClass c = psiFacade.findClass(q, GlobalSearchScope.allScope(p));
+        // System.out.println("checkClass123 " + q + " ==> " + c);
+        return c;
     }
 }

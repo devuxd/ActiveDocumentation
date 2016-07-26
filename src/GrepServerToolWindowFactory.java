@@ -70,6 +70,7 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
                     try {
                         s.stop();
                     } catch (Exception e2) {
+                        e2.printStackTrace();
                     }
                 }
             }
@@ -78,12 +79,15 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
         FileChangeManager fcm = new FileChangeManager(s);
         fcm.initComponent();
 
-        ArrayList<ArrayList> a11 = new ArrayList<ArrayList>();
+        /*ArrayList<ArrayList> a11 = new ArrayList<ArrayList>();
         ArrayList<List> a22 = new ArrayList<List>();
         String a33 = "";
         Object a44 = new Object();
-        System.out.println(a11.getClass().isInstance(a22.getClass()));
-        System.out.println(a33.getClass().isInstance(a44.getClass()));
+        ArrayList<String> a55 = new ArrayList<String>();
+        ArrayList<Object> a66 = new ArrayList<Object>();
+        System.out.println(a22.getClass().isInstance(a11.getClass()));
+        System.out.println(a44.getClass().isInstance(a33.getClass())); // Super.instanceOf(sub)
+        System.out.println(a66.getClass().isInstance(a55.getClass())); // Super.instanceOf(sub)*/
     }
 
     // SHOULD NOT USE UNLESS YOU ARE BUILDING THE PSI CLASS HIERARCHY IF INTELLIJ ISSUED SOME NEW FEATURES / UPDATES
@@ -95,6 +99,7 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
         PsiJavaVisitor pjv = new PsiJavaVisitor(initialClassTable);
         pjv.visit(psiJavaFile, root);
         if (PsiPreCompEngine.recomputePsiClassTable) {
+            System.out.println("FINDME");
             System.out.println(PsiPreCompEngine.ct);
         }
         return root;

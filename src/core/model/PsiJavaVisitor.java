@@ -5,9 +5,6 @@ package core.model;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.util.xml.AnnotatedElement;
-import com.siyeh.ig.maturity.SystemOutErrInspection;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,6 +57,7 @@ public class PsiJavaVisitor implements TreeVisitor {
         }
 
         for (PsiElement child : psiElement.getChildren()) {
+            // System.out.println(child.getText());
             visit(child, new JsonObject());
         }
 
@@ -88,13 +86,13 @@ public class PsiJavaVisitor implements TreeVisitor {
 
         // check annotations
         if(element instanceof PsiAnnotationOwner){
-            System.out.println("---------Annotate----------");
-            System.out.println(element.getParent());
-            System.out.println(element);
+            //System.out.println("---------Annotate----------");
+            //System.out.println(element.getParent());
+            //System.out.println(element);
             List<String> li = new ArrayList<>();
             for(PsiAnnotation pa : (((PsiAnnotationOwner) element).getAnnotations())){
                 if(pa.getText().trim().startsWith("@")) {
-                    System.out.println("\t => " + pa.getText());
+                    //System.out.println("\t => " + pa.getText());
                     li.add(pa.getText().trim());
                 }
             }
@@ -110,7 +108,7 @@ public class PsiJavaVisitor implements TreeVisitor {
 
             }
 
-            System.out.println("-------------------");
+            // System.out.println("-------------------");
         }
 
         // customized properties that elements will have

@@ -71,7 +71,7 @@ document.observe("dom:loaded", function() {
             }else if(message.command === "DELETE_FILE"){
 
                 var messageInfo = message.data;
-                var targetFileName = messageInfo.properties.canonicalPath;
+                var targetFileName = messageInfo.canonicalPath;
                 var curr = projectHierarchy;
                 
                 while(curr != null && !(curr.properties.canonicalPath === targetFileName)){
@@ -93,7 +93,7 @@ document.observe("dom:loaded", function() {
             }else if(message.command === "RENAME_FILE"){
 
                 var messageInfo = message.data;
-                var targetFileName = messageInfo.properties.oldCanonicalPath;
+                var targetFileName = messageInfo.oldCanonicalPath;
                 var curr = projectHierarchy;
                 
                 while(!(curr.properties.canonicalPath === targetFileName)){
