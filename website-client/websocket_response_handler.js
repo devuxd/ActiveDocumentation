@@ -1,6 +1,3 @@
-var projectHierarchy = null;
-var projectClassTable = null;
-
 document.observe("dom:loaded", function() {
     function log(text) {
         $("log").innerHTML = (new Date).getTime() + ": " + (!Object.isUndefined(text) && text !== null ? text.escapeHTML() : "null") + $("log").innerHTML;
@@ -49,6 +46,7 @@ document.observe("dom:loaded", function() {
                 curr.properties.code = messageInfo.code;
                 curr.properties.ast = messageInfo.ast;
                 console.log("Code updated in " + curr.properties.canonicalPath);
+
                 // ?
 
             }else if(message.command === "INITIAL_PROJECT_CLASS_TABLE"){
@@ -67,6 +65,7 @@ document.observe("dom:loaded", function() {
                 }
 
                 console.log("Updated project class table.");
+                console.log(runRules());
 
             }else if(message.command === "DELETE_FILE"){
 
@@ -89,6 +88,7 @@ document.observe("dom:loaded", function() {
                 }
 
                 console.log("Deleted item at " + targetFileName);
+                console.log(runRules());
 
             }else if(message.command === "RENAME_FILE"){
 
@@ -129,6 +129,7 @@ document.observe("dom:loaded", function() {
 
                 curr.children.push(messageInfo);
                 console.log("created file at " + messageInfo.canonicalPath);
+                console.log(runRules());
 
             }else{
 
