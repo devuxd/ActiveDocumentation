@@ -118,9 +118,10 @@ public class FileChangeManager implements ApplicationComponent, BulkFileListener
             data.add("children", new JsonArray());
         } else {
             data.addProperty("isDirectory", false);
-            data.addProperty("code", psiFile.getText());
+            data.addProperty("text", psiFile.getText());
             data.add("ast", GrepServerToolWindowFactory.generateASTAsJSON(psiFile));
-
+            data.addProperty("fileType", file.getFileType().getName());
+            data.addProperty("fileName", psiFile.getName());
         }
 
         // add more params

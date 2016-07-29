@@ -4,6 +4,8 @@
 //		 find patterns
 // 		 click to navigate to code
 
+// check everything related to a certain rule, so try and query all the things related to a design rule
+
 // ALL ENTITY CLASSES MUST REGISTER THEMSELVES
 
 function generateRuleTable(){
@@ -77,6 +79,18 @@ function runRules(){
 
 		for(b = 0; b < arr[a].length; b++){
 			var anALink = document.createElement("a");
+			anALink.onclick = function(){
+				// alert(this.innerHTML + "\n" + this.getAttribute("data-class-of-line-num"));
+				var messageToSend = {"source":"WEB", "destination":"IDEA", "command":"JUMP_TO_CLASS_WITH_LINE_NUM"};
+
+				var dataOfMessage = {};
+				dataOfMessage["fileName"] = this.getAttribute("data-class-of-line-num");
+				dataOfMessage["lineNumber"] = parseInt(this.innerHTML);
+
+				messageToSend["data"] = dataOfMessage;
+				ws.send(JSON.stringify(messageToSend));
+			}
+			anALink.setAttribute("data-class-of-line-num", getContainingFileGivenASTNode(arr[a][b]).properties.fileName);
 			anALink.innerHTML = arr[a][b].properties.textOffset; // need to find the class where the error is
 			ch2OfDiv.appendChild(anALink);
 			// res.push(arr[a][b]);

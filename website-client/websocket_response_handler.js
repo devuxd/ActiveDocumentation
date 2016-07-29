@@ -1,3 +1,5 @@
+var ws;
+
 document.observe("dom:loaded", function() {
     function log(text) {
         $("log").innerHTML = (new Date).getTime() + ": " + (!Object.isUndefined(text) && text !== null ? text.escapeHTML() : "null") + $("log").innerHTML;
@@ -7,7 +9,7 @@ document.observe("dom:loaded", function() {
         alert("FATAL: WebSocket not natively supported. This demo will not work!");
     }
 
-    var ws;
+    // var ws;
 
     $("uriForm").observe("submit", function(e) {
         e.stop();
@@ -45,6 +47,7 @@ document.observe("dom:loaded", function() {
 
                 curr.properties.code = messageInfo.code;
                 curr.properties.ast = messageInfo.ast;
+                addParentPropertyToNodes(curr); // update parent relationships again
                 console.log("Code updated in " + curr.properties.canonicalPath);
 
                 // ?
@@ -128,6 +131,7 @@ document.observe("dom:loaded", function() {
                 }
 
                 curr.children.push(messageInfo);
+                addParentPropertyToNodes(curr); // update parent relationships again
                 console.log("created file at " + messageInfo.canonicalPath);
                 console.log(runRules());
 

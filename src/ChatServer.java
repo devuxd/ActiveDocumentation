@@ -1,9 +1,25 @@
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.intellij.icons.AllIcons;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.components.ApplicationComponent;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.ScrollType;
+import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.impl.file.impl.FileManager;
+import com.intellij.psi.search.FilenameIndex;
+import com.intellij.psi.search.GlobalSearchScope;
 import org.java_websocket.WebSocket;
 import org.java_websocket.WebSocketImpl;
 import org.java_websocket.framing.Framedata;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
+import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -50,6 +66,28 @@ public class ChatServer extends WebSocketServer {
 	public void onMessage(WebSocket conn, String message ) {
 		this.sendToAll( message );
 		System.out.println( conn + ": " + message );
+
+        JsonParser parser = new JsonParser();
+        JsonObject messageAsJson = parser.parse(message).getAsJsonObject();
+        JsonObject theDataFromTheMessage = messageAsJson.get("data").getAsJsonObject();
+
+        if(messageAsJson.get("command").getAsString().equals("JUMP_TO_CLASS_WITH_LINE_NUM")){
+            EventQueue.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    String fileToFocusOn = theDataFromTheMessage.get("fileName").getAsString();
+                    int indexToFocusOn = theDataFromTheMessage.get("lineNumber").getAsInt();
+                    Project currentProject = ProjectManager.getInstance().getOpenProjects()[0];
+                    VirtualFile theVFile = FilenameIndex.getVirtualFilesByName(currentProject, fileToFocusOn, GlobalSearchScope.projectScope(currentProject)).iterator().next();
+                    FileEditorManager.getInstance(currentProject).openFile(theVFile, true);
+                    Editor theEditor = FileEditorManager.getInstance(currentProject).getSelectedTextEditor();
+                    theEditor.getCaretModel().moveToOffset(indexToFocusOn);
+                    theEditor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
+                }
+            });
+        }
+
+
 	}
 
 	@Override
@@ -140,4 +178,5 @@ public class ChatServer extends WebSocketServer {
 		}
 
 	}
+
 }

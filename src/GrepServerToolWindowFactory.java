@@ -1,12 +1,17 @@
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.ScrollType;
+import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.psi.*;
+import com.intellij.psi.search.FilenameIndex;
+import com.intellij.psi.search.GlobalSearchScope;
 import core.model.PsiJavaVisitor;
 import core.model.PsiPreCompEngine;
 import org.java_websocket.WebSocketImpl;
@@ -27,6 +32,9 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
     private ChatServer s;
     private static List<VirtualFile> ignoredFilesList = null;
     private static JsonObject initialClassTable = new JsonObject();
+    public static String fileToFocusOn = "";
+    public static int indexToFocusOn = 0;
+
 
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
@@ -43,7 +51,6 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        // System.out.println(generateProjectHierarchyAsJSON().toString());
                     }
                 }
         );
@@ -171,8 +178,9 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
                         propertiesOfChild.addProperty("fileType", childOfItem.getFileType().getName());
                         jsonChildOfItem.add("properties", propertiesOfChild);
                         PsiFile psiFile = PsiManager.getInstance(project).findFile(childOfItem);
-                        propertiesOfChild.addProperty("code", psiFile.getText());
+                        propertiesOfChild.addProperty("text", psiFile.getText());
                         propertiesOfChild.add("ast", generateASTAsJSON(psiFile));
+                        propertiesOfChild.addProperty("fileName", psiFile.getName());
                     }
                     canonicalToJsonMap.get(item.getCanonicalPath()).get("children").getAsJsonArray().add(jsonChildOfItem);
                     canonicalToJsonMap.put(childOfItem.getCanonicalPath(), jsonChildOfItem);

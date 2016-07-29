@@ -78,10 +78,12 @@ function astTreeFindAllAux(node, func, list){
 }
 
 // add properties to everything including project hierarchy and ASTs
+// TODO: MUST DO THIS AGAIN ON UPDATES
 function addParentPropertyToNodes(root){
 
-	// console.log("addParentPropertyToNodes");
+	console.log("addParentPropertyToNodes");
 	var setParent = function(o){
+		// console.log(o);
     	var i;
     	if(o.hasOwnProperty("children")){
     		for(i = 0; i < o["children"].length; i++){
@@ -89,6 +91,9 @@ function addParentPropertyToNodes(root){
 				setParent(o["children"][i]);
 			}
 		}else if(o.hasOwnProperty("properties") && o.properties.hasOwnProperty("ast")){
+			if(o.properties.ast.hasOwnProperty("properties")){
+				o.properties.ast.properties.parent = o;
+			}
 			setParent(o.properties.ast);
 		}
 		
@@ -285,4 +290,24 @@ function instanceOfAux(c1, c2, visited){
 
 	return false;
 
+}
+
+function getContainingFileGivenASTNode(node){
+	var curr = node;
+	console.log("getContainingFileGivenASTNode");
+	console.log(node);
+	while(true){
+		
+		// all nodes that have a "text" property are ast nodes
+		if(curr.hasOwnProperty("properties") && curr.properties.hasOwnProperty("parent")){
+			if(curr.properties.hasOwnProperty("ast")){
+				break;
+			}
+			curr = curr.properties.parent;
+		}else{
+			break;
+		}
+	}
+	console.log(curr);
+	return curr;
 }
