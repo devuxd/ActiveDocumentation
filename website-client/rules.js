@@ -12,7 +12,7 @@ function generateRuleTable(){
 
 	var ruleTable = [];
 	var i;
-	for(i = 0; i < 5; i++){
+	for(i = 0; i < 5+1; i++){
 		ruleTable.push({});
 	}
 
@@ -20,18 +20,27 @@ function generateRuleTable(){
 	ruleTable[0].description = "All @Entity classes must register themselves so that they can be used with Objectify. You need the statement ObjectifyService.register(TheEntityClassInQuestion);";
 	ruleTable[0].relatedLinks = ["https://github.com/objectify/objectify/wiki/Entities", "https://www.google.com/", "https://github.com/"];
 	// ruleTable[0].relatedRules = [ruleId1, ruleId2, ruleId3];
+	ruleTable[0].ruleFunc = test1;
 
 	ruleTable[1].header = "Saves and deletes should be followed by now().";
 	ruleTable[1].description = "Saves and deletes should be followed by now() preemptively so that Google App Engine always has the most up to date version of an object.";
+	ruleTable[1].ruleFunc = test2;
 
 	ruleTable[2].header = "All @Entity classes must have a field called \'id\' which is labeled with @Id.";
 	ruleTable[2].description = "In order for Objectify to properly function, @Entity classes require ids for unique identification.";
+	ruleTable[2].ruleFunc = test3;
 
 	ruleTable[3].header = "All @Entity classes must have two constructors at the minimum, with one of them being a no-arg constructor.";
 	ruleTable[3].description = "@Entity classes need a no-arg constructor for serialization and require another constructor with args for the initialization of the object.";
+	ruleTable[3].ruleFunc = test4;
 
 	ruleTable[4].header = "When contains is called on a Collection of @Entity classes, the @Entity class in question requires an equals() function to be defined.";
 	ruleTable[4].description = "An equals function is needed because the default equals() function will not work as usually intended.";
+	ruleTable[4].ruleFunc = test5;
+
+	ruleTable[5].header = "Alpha.Beta.Gamma";
+	ruleTable[5].description = "Aaaaa.";
+	ruleTable[5].ruleFunc = test5;
 
 	return ruleTable;
 
@@ -39,7 +48,7 @@ function generateRuleTable(){
 
 ruleTable = generateRuleTable();
 
-function runRules(){
+function runRulesX(){
 	// console.clear();
 	var ruleBox = document.getElementById("ruleBox").firstElementChild.firstElementChild.firstElementChild;
 	ruleBox.innerHTML = "";

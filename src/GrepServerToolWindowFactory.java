@@ -233,6 +233,7 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
         List<String> list = new ArrayList<>();
         list.add(".idea");
         list.add("out");
+        list.add("website-client");
 
         List<VirtualFile> set = new ArrayList<>();
 
