@@ -22,7 +22,7 @@ function reloadRules(){
 	var b;
 
 	for(a = 0; a < ruleTable.length; a++){
-		var ruleResultsOfA = ruleTable[a].ruleFunc();
+		var ruleResultsOfA = RuleContainer[ruleTable[a].ruleFunc](); // ruleTable[a].ruleFunc();
 
 		if(ruleResultsOfA.length == 0){
 			continue;
