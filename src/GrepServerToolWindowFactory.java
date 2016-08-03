@@ -1,5 +1,6 @@
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;
@@ -67,11 +68,14 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
                     WebSocketImpl.DEBUG = false;
                     int port = 8887; // 843 flash policy port
                     s = new ChatServer(port, MessageProcessor.encodeData(new Object[]{"IDEA", "WEB", "INITIAL_PROJECT_HIERARCHY", generateProjectHierarchyAsJSON()}).toString());
+                    System.out.println("hi1");
                     s.start();
+                    System.out.println("hi2");
                     System.out.println();
                     System.out.println(initialClassTable);
+                    System.out.println("hi3");
                     s.sendToAll(MessageProcessor.encodeData(new Object[]{"IDEA", "WEB", "INITIAL_PROJECT_CLASS_TABLE", initialClassTable}).toString());
-                    // s.sendToAll(MessageProcessor.encodeData(new Object[]{"IDEA", "WEB", "INITIAL_PSI_CLASS_TABLE", ct}).toString());
+                    s.sendToAll(MessageProcessor.encodeData(new Object[]{"IDEA", "WEB", "UPDATE_RULE_TABLE_AND_CONTAINER", sendRulesInitially()}).toString());
                     System.out.println("ChatServer started on port: " + s.getPort());
                 } catch (Exception e) {
                     try {
@@ -192,6 +196,43 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
         System.out.println(jsonRootDirectory);
         return jsonRootDirectory;
 
+    }
+
+    public static JsonObject sendRulesInitially() {
+        System.out.println("Send Rules initially");
+        JsonObject data = new JsonObject();
+
+        // start off with root
+        Project project = ProjectManager.getInstance().getOpenProjects()[0];
+        VirtualFile rootDirectoryVirtualFile = project.getBaseDir();
+
+        // set up queue
+        java.util.List<VirtualFile> q = new ArrayList<VirtualFile>();
+        q.add(rootDirectoryVirtualFile);
+
+        // traverse the queue
+        while (!q.isEmpty()) {
+            java.util.List<VirtualFile> new_q = new ArrayList<VirtualFile>();
+            for (VirtualFile item : q) {
+                // System.out.println(item.getName());
+                System.out.println("Included: " + item.getCanonicalPath());
+                for (VirtualFile childOfItem : item.getChildren()) {
+                    new_q.add(childOfItem);
+                    if(childOfItem.getCanonicalPath().endsWith("ruleJson.txt")) {
+                        PsiFile psiFile = PsiManager.getInstance(project).findFile(childOfItem);
+                        data.addProperty("text", psiFile.getText());
+                        return data;
+                        // return psiFile.getText();
+                        // s.sendToAll(MessageProcessor.encodeData(new Object[]{"IDEA", "WEB", "UPDATE_RULE_TABLE_AND_CONTAINER", psiFile.getText()}).toString());
+                    }
+                }
+            }
+            q = new_q;
+        }
+        if(!data.has("text")){
+            data.addProperty("text", "");
+        }
+        return data;
     }
 
     public static boolean shouldIgnoreFile(VirtualFile s) {

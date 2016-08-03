@@ -44,6 +44,16 @@ public class FileChangeManager implements ApplicationComponent, BulkFileListener
     public void handleVFileChangeEvent(VFileEvent event) {
         VirtualFile file = event.getFile();
 
+        // if we are dealing with ruleJson.txt
+        if(file.getName().equals("ruleJson.txt")){
+            Project project = ProjectManager.getInstance().getOpenProjects()[0];
+            PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
+            JsonObject data = new JsonObject();
+            data.addProperty("text", psiFile.getText());
+            s.sendToAll(MessageProcessor.encodeData(new Object[]{"IDEA", "WEB", "UPDATE_RULE_TABLE_AND_CONTAINER", data}).toString());
+            return;
+        }
+
         if (GrepServerToolWindowFactory.shouldIgnoreFile(file)) {
             return;
         }

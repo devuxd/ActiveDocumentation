@@ -30,6 +30,7 @@ function reloadRules(){
 
 		var theDiv = document.createElement("div");
 		theDiv.setAttribute("class", "card blue-grey darken-1");
+		theDiv.setAttribute("title", ruleTable[a].ruleFunc);
 
 		/////////// child 1 - add title and description ///////////////
 
@@ -54,6 +55,7 @@ function reloadRules(){
 
 		for(b = 0; b < ruleResultsOfA.length; b++){
 			var anALink = document.createElement("a");
+			var containingFileName = getContainingFileGivenASTNode(ruleResultsOfA[b]).properties.fileName;
 			anALink.onclick = function(){
 				// alert(this.innerHTML + "\n" + this.getAttribute("data-class-of-line-num"));
 				var messageToSend = {"source":"WEB", "destination":"IDEA", "command":"JUMP_TO_CLASS_WITH_LINE_NUM"};
@@ -65,8 +67,8 @@ function reloadRules(){
 				messageToSend["data"] = dataOfMessage;
 				ws.send(JSON.stringify(messageToSend));
 			}
-			anALink.setAttribute("data-class-of-line-num", getContainingFileGivenASTNode(ruleResultsOfA[b]).properties.fileName);
-			anALink.innerHTML = ruleResultsOfA[b].properties.textOffset; // need to find the class where the error is
+			anALink.setAttribute("data-class-of-line-num", containingFileName);
+			anALink.innerHTML = containingFileName + ":" + ruleResultsOfA[b].properties.textOffset; // need to find the class where the error is
 			ch2OfDiv.appendChild(anALink);
 		}
 
