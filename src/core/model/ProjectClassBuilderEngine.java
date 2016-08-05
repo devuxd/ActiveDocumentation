@@ -10,10 +10,8 @@ import com.intellij.psi.util.PsiUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+// This class is utitilized when traversing ASTs, so during the traversal, the types that are used get stored for processing in web-client
 
-/**
- * Created by User on 7/21/2016.
- */
 public class ProjectClassBuilderEngine {
 
     private JsonObject ct = new JsonObject();
@@ -31,6 +29,7 @@ public class ProjectClassBuilderEngine {
     }
 
     public static String getTypeOfImportantElements(PsiElement element){
+        // These are the three ways that types can be found in a Java file
         if (element instanceof PsiExpression) {
             PsiType pt = ((PsiExpression) element).getType();
             if (pt != null) {

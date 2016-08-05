@@ -1,21 +1,5 @@
 function runRules(){
 
-	function createScript(src) {
-	    var s = document.createElement("script");
-	    s.src = src;
-	    return s;
-	}
-
-	var oldScript = document.querySelector("script[src^='rules.js']");
-	var newScript = createScript("rules.js?t=" + (new Date()).getTime());
-	// newScript.onload(reloadRules);
-	newScript.onload=function(){reloadRules();};
-	document.head.replaceChild(newScript, oldScript);
-
-}
-
-function reloadRules(){
-
 	var ruleBox = document.getElementById("ruleBox").firstElementChild.firstElementChild.firstElementChild;
 	ruleBox.innerHTML = "";
 	var a;
@@ -62,12 +46,13 @@ function reloadRules(){
 
 				var dataOfMessage = {};
 				dataOfMessage["fileName"] = this.getAttribute("data-class-of-line-num");
-				dataOfMessage["lineNumber"] = parseInt(this.innerHTML);
+				dataOfMessage["lineNumber"] = parseInt(this.getAttribute("data-line-num"));
 
 				messageToSend["data"] = dataOfMessage;
 				ws.send(JSON.stringify(messageToSend));
 			}
 			anALink.setAttribute("data-class-of-line-num", containingFileName);
+			anALink.setAttribute("data-line-num", ruleResultsOfA[b].properties.textOffset);
 			anALink.innerHTML = containingFileName + ":" + ruleResultsOfA[b].properties.textOffset; // need to find the class where the error is
 			ch2OfDiv.appendChild(anALink);
 		}
@@ -75,7 +60,6 @@ function reloadRules(){
 		ruleBox.appendChild(theDiv);
 
 	}
-
 
 	return [];
 

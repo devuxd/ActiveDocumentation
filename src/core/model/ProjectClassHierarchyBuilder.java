@@ -1,7 +1,5 @@
 package core.model;
 
-// SHOULD NOT USE UNLESS YOU ARE BUILDING THE PSI CLASS HIERARCHY IF INTELLIJ ISSUED SOME NEW FEATURES / UPDATES
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -9,6 +7,8 @@ import com.intellij.psi.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
+// This class actually puts the particular classes into the classTable and also processes superclasses and interfaces
 
 public class ProjectClassHierarchyBuilder {
 

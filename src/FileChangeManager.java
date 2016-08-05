@@ -17,6 +17,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+// Listens for changes to files and then sends the changes over to the web-client
+// Note: VirtualFiles can also refer to directories (not just files)
 public class FileChangeManager implements ApplicationComponent, BulkFileListener {
 
     private final MessageBusConnection connection;
@@ -35,12 +37,9 @@ public class FileChangeManager implements ApplicationComponent, BulkFileListener
         connection.disconnect();
     }
 
-    public void before(List<? extends VFileEvent> events) {
-        // System.out.println(events);
-        // ...
-    }
+    public void before(List<? extends VFileEvent> events) {}
 
-    // precondition: event instanceof VFileContentChangeEvent => true
+    // when the text of a file changes
     public void handleVFileChangeEvent(VFileEvent event) {
         VirtualFile file = event.getFile();
 
@@ -84,7 +83,7 @@ public class FileChangeManager implements ApplicationComponent, BulkFileListener
 
     }
 
-    // precondition: event instanceof VFileContentChangeEvent => true
+    // when a file is deleted
     public void handleVFileDeleteEvent(VFileEvent event) {
 
         VirtualFile file = event.getFile();
@@ -102,6 +101,7 @@ public class FileChangeManager implements ApplicationComponent, BulkFileListener
         // I think it should be okay to not update the project class hierarchy on deletes, since other code changes should resolve everything
     }
 
+    // when a file is created
     public void handleVFileCreateEvent(VFileEvent event) {
 
         VirtualFile file = event.getFile();
@@ -147,6 +147,7 @@ public class FileChangeManager implements ApplicationComponent, BulkFileListener
 
     }
 
+    // when a file's properties change. for instance, if the file is renamed.
     public void handleVFilePropertyChangeEvent(VFileEvent event) {
 
         // potential bug area: the file path of the old file may not be canonical
@@ -177,6 +178,7 @@ public class FileChangeManager implements ApplicationComponent, BulkFileListener
 
     }
 
+    // after an event happens, this code runs
     public void after(List<? extends VFileEvent> events) {
 
         if (s == null) {

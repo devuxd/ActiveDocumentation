@@ -11,6 +11,8 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+// helps get the properties of an object that is an instance of some Psi- class
+
 public class IntrospectionUtil
 {
     private static final Logger LOG = Logger.getInstance("idea.plugin.psiviewer.util.IntrospectionUtil");

@@ -5,10 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b2f97b0-7626-40cb-ad1b-484554f32f99" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/ServerToolWindowFactory.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/website-client/def.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/website-client/index.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/website-client/ruleJson.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/website-client/rules.js" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ChatServer.java" afterPath="$PROJECT_DIR$/src/ChatServer.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/FileChangeManager.java" afterPath="$PROJECT_DIR$/src/FileChangeManager.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GrepServerToolWindowFactory.java" afterPath="$PROJECT_DIR$/src/GrepServerToolWindowFactory.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/MessageProcessor.java" afterPath="$PROJECT_DIR$/src/MessageProcessor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/core/model/IntrospectionUtil.java" afterPath="$PROJECT_DIR$/src/core/model/IntrospectionUtil.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/core/model/ProjectClassBuilderEngine.java" afterPath="$PROJECT_DIR$/src/core/model/ProjectClassBuilderEngine.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/core/model/ProjectClassHierarchyBuilder.java" afterPath="$PROJECT_DIR$/src/core/model/ProjectClassHierarchyBuilder.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/core/model/PsiClassHierarchyBuilder.java" afterPath="$PROJECT_DIR$/src/core/model/PsiClassHierarchyBuilder.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/core/model/PsiJavaVisitor.java" afterPath="$PROJECT_DIR$/src/core/model/PsiJavaVisitor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/core/model/PsiPreCompEngine.java" afterPath="$PROJECT_DIR$/src/core/model/PsiPreCompEngine.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/core/model/TreeVisitor.java" afterPath="$PROJECT_DIR$/src/core/model/TreeVisitor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/website-client/chat.html" afterPath="$PROJECT_DIR$/website-client/chat.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/website-client/precomputedclasstable.js" afterPath="$PROJECT_DIR$/website-client/precomputedclasstable.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/website-client/ruleExecutor.js" afterPath="$PROJECT_DIR$/website-client/ruleExecutor.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/website-client/websocket_response_handler.js" afterPath="$PROJECT_DIR$/website-client/websocket_response_handler.js" />
     </list>
     <ignored path="Active Documentation.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,64 +47,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="GrepServerToolWindowFactory.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/GrepServerToolWindowFactory.java">
+      <file leaf-file-name="PsiClassHierarchyBuilder.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/core/model/PsiClassHierarchyBuilder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="217">
-              <caret line="78" column="64" selection-start-line="78" selection-start-column="64" selection-end-line="78" selection-end-column="64" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#5934#5954#0" expanded="true" />
-                <element signature="e#6132#6145#0" expanded="true" />
-                <element signature="e#6313#6326#0" expanded="true" />
-                <element signature="e#9444#9457#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FileChangeManager.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/FileChangeManager.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="51" column="56" selection-start-line="51" selection-start-column="56" selection-end-line="51" selection-end-column="56" />
-              <folding>
-                <element signature="e#7831#7832#0" expanded="true" />
-                <element signature="e#7858#7859#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ChatServer.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ChatServer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="650">
-              <caret line="103" column="0" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MessageProcessor.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/MessageProcessor.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="6" column="79" selection-start-line="6" selection-start-column="72" selection-end-line="6" selection-end-column="79" />
-              <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#271#272#0" expanded="false" />
-                <element signature="e#302#303#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PsiPreCompEngine.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/core/model/PsiPreCompEngine.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="341">
-              <caret line="64" column="75" selection-start-line="64" selection-start-column="75" selection-end-line="64" selection-end-column="75" />
+            <state relative-caret-position="204">
+              <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -130,18 +94,18 @@
         <option value="$PROJECT_DIR$/src/org/java_websocket/util/Base64.java" />
         <option value="$PROJECT_DIR$/src/core/model/TreeModel.java" />
         <option value="$PROJECT_DIR$/src/core/model/JsonTree.java" />
-        <option value="$PROJECT_DIR$/src/core/model/TreeVisitor.java" />
-        <option value="$PROJECT_DIR$/src/core/model/IntrospectionUtil.java" />
         <option value="$PROJECT_DIR$/src/PsiPreCompEngine.java" />
+        <option value="$PROJECT_DIR$/src/GrepServerToolWindowFactory.java" />
+        <option value="$PROJECT_DIR$/src/FileChangeManager.java" />
+        <option value="$PROJECT_DIR$/src/ChatServer.java" />
+        <option value="$PROJECT_DIR$/src/MessageProcessor.java" />
+        <option value="$PROJECT_DIR$/src/core/model/IntrospectionUtil.java" />
         <option value="$PROJECT_DIR$/src/core/model/PsiClassHierarchyBuilder.java" />
-        <option value="$PROJECT_DIR$/src/core/model/ProjectClassHierarchyBuilder.java" />
-        <option value="$PROJECT_DIR$/src/core/model/ProjectClassBuilderEngine.java" />
+        <option value="$PROJECT_DIR$/src/core/model/TreeVisitor.java" />
         <option value="$PROJECT_DIR$/src/core/model/PsiJavaVisitor.java" />
         <option value="$PROJECT_DIR$/src/core/model/PsiPreCompEngine.java" />
-        <option value="$PROJECT_DIR$/src/MessageProcessor.java" />
-        <option value="$PROJECT_DIR$/src/ChatServer.java" />
-        <option value="$PROJECT_DIR$/src/FileChangeManager.java" />
-        <option value="$PROJECT_DIR$/src/GrepServerToolWindowFactory.java" />
+        <option value="$PROJECT_DIR$/src/core/model/ProjectClassHierarchyBuilder.java" />
+        <option value="$PROJECT_DIR$/src/core/model/ProjectClassBuilderEngine.java" />
       </list>
     </option>
   </component>
@@ -153,10 +117,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1382" />
-    <option name="height" value="744" />
+    <option name="x" value="-1928" />
+    <option name="y" value="-336" />
+    <option name="width" value="1936" />
+    <option name="height" value="1176" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -183,8 +147,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -238,6 +200,8 @@
         </subPane>
       </pane>
       <pane id="Scratches" />
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -245,7 +209,7 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Font" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
   </component>
   <component name="RecentsManager">
@@ -530,7 +494,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="-1928" y="-336" width="1936" height="1176" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -538,14 +502,14 @@
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.48789713" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.34042552" sideWeight="0.23524962" order="10" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19942474" sideWeight="0.24733475" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.4969743" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34042552" sideWeight="0.76475036" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19942474" sideWeight="0.7526652" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3420622" sideWeight="0.49394855" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19440243" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1369936" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24962178" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -575,7 +539,7 @@
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="68" />
+      <option name="time" value="70" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -584,13 +548,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/netty-all-4.1.0.CR7.jar!/io/netty/util/internal/ObjectUtil.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$APPLICATION_HOME_DIR$/lib/netty-all-4.1.0.CR7.jar!/io/netty/handler/codec/http/LastHttpContent.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
@@ -715,20 +672,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/core/model/IntrospectionUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="17" column="31" selection-start-line="17" selection-start-column="31" selection-end-line="17" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/core/model/ProjectClassBuilderEngine.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="60" column="28" selection-start-line="60" selection-start-column="28" selection-end-line="60" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$APPLICATION_HOME_DIR$/lib/idea.jar!/com/intellij/openapi/wm/impl/ToolWindowImpl.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="123">
@@ -740,37 +683,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="114">
           <caret line="857" column="0" selection-start-line="857" selection-start-column="0" selection-end-line="857" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/core/model/PsiJavaVisitor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="104" column="13" selection-start-line="104" selection-start-column="13" selection-end-line="104" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/core/model/PsiClassHierarchyBuilder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1241">
-          <caret line="79" column="0" selection-start-line="79" selection-start-column="0" selection-end-line="79" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/core/model/ProjectClassHierarchyBuilder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/core/model/TreeVisitor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="5" column="17" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
         </state>
       </provider>
     </entry>
@@ -788,18 +700,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/MessageProcessor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="6" column="79" selection-start-line="6" selection-start-column="72" selection-end-line="6" selection-end-column="79" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#271#272#0" expanded="false" />
-            <element signature="e#302#303#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/openapi/vfs/VirtualFile.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -807,44 +707,120 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/core/model/PsiPreCompEngine.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="341">
-          <caret line="64" column="75" selection-start-line="64" selection-start-column="75" selection-end-line="64" selection-end-column="75" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ChatServer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="650">
-          <caret line="103" column="0" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/GrepServerToolWindowFactory.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="217">
-          <caret line="78" column="64" selection-start-line="78" selection-start-column="64" selection-end-line="78" selection-end-column="64" />
+        <state relative-caret-position="952">
+          <caret line="272" column="74" selection-start-line="272" selection-start-column="74" selection-end-line="272" selection-end-column="74" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#5934#5954#0" expanded="true" />
-            <element signature="e#6132#6145#0" expanded="true" />
-            <element signature="e#6313#6326#0" expanded="true" />
-            <element signature="e#9444#9457#0" expanded="true" />
+            <element signature="method#createToolWindowContent#0;class#GrepServerToolWindowFactory#0" expanded="false" />
+            <element signature="method#generateJavaASTAsJSON#0;class#GrepServerToolWindowFactory#0" expanded="false" />
+            <element signature="method#generateASTAsJSON#0;class#GrepServerToolWindowFactory#0" expanded="false" />
+            <element signature="method#generateProjectHierarchyAsJSON#0;class#GrepServerToolWindowFactory#0" expanded="false" />
+            <element signature="method#sendRulesInitially#0;class#GrepServerToolWindowFactory#0" expanded="false" />
+            <element signature="method#shouldIgnoreFile#0;class#GrepServerToolWindowFactory#0" expanded="false" />
+            <element signature="method#isFileAChildOf#0;class#GrepServerToolWindowFactory#0" expanded="false" />
+            <element signature="method#getIgnoredFilesList#0;class#GrepServerToolWindowFactory#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/FileChangeManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="51" column="56" selection-start-line="51" selection-start-column="56" selection-end-line="51" selection-end-column="56" />
+        <state relative-caret-position="833">
+          <caret line="180" column="45" selection-start-line="180" selection-start-column="45" selection-end-line="180" selection-end-column="45" />
           <folding>
-            <element signature="e#7831#7832#0" expanded="true" />
-            <element signature="e#7858#7859#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="method#handleVFileChangeEvent#0;class#FileChangeManager#0" expanded="false" />
+            <element signature="method#handleVFileDeleteEvent#0;class#FileChangeManager#0" expanded="false" />
+            <element signature="method#handleVFileCreateEvent#0;class#FileChangeManager#0" expanded="false" />
+            <element signature="method#handleVFilePropertyChangeEvent#0;class#FileChangeManager#0" expanded="false" />
+            <element signature="method#after#0;class#FileChangeManager#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ServerToolWindowFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-5262">
+          <caret line="29" column="3" selection-start-line="29" selection-start-column="3" selection-end-line="29" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/MessageProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="11" column="5" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ChatServer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="35" column="68" selection-start-line="35" selection-start-column="68" selection-end-line="35" selection-end-column="68" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/core/model/IntrospectionUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="13" column="79" selection-start-line="13" selection-start-column="79" selection-end-line="13" selection-end-column="79" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/core/model/PsiJavaVisitor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="21" column="27" selection-start-line="21" selection-start-column="27" selection-end-line="21" selection-end-column="27" />
+          <folding>
+            <element signature="method#isClassAcceptable#0;class#PsiJavaVisitor#0" expanded="false" />
+            <element signature="method#generateAcceptableClasses#0;class#PsiJavaVisitor#0" expanded="false" />
+            <element signature="method#generateUnacceptableVars#0;class#PsiJavaVisitor#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/core/model/PsiPreCompEngine.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="19" column="69" selection-start-line="19" selection-start-column="69" selection-end-line="19" selection-end-column="69" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/core/model/TreeVisitor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="7" column="17" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/core/model/ProjectClassBuilderEngine.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/core/model/ProjectClassHierarchyBuilder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="10" column="117" selection-start-line="10" selection-start-column="117" selection-end-line="10" selection-end-column="117" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/core/model/PsiClassHierarchyBuilder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

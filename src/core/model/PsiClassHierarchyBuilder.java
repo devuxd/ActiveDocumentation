@@ -7,6 +7,8 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.java.PsiIdentifierImpl;
 import com.intellij.psi.util.PsiUtil;
 
+// This class helps build the relationship of all the Psi- classes with the special project that is included as a .zip on the GitHub page.
+
 public class PsiClassHierarchyBuilder {
 
     private JsonObject classTable;

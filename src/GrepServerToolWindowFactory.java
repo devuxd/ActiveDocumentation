@@ -1,18 +1,12 @@
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.intellij.icons.AllIcons;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.ScrollType;
-import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.psi.*;
-import com.intellij.psi.search.FilenameIndex;
-import com.intellij.psi.search.GlobalSearchScope;
 import core.model.PsiJavaVisitor;
 import core.model.PsiPreCompEngine;
 import org.java_websocket.WebSocketImpl;
@@ -33,10 +27,9 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
     private ChatServer s;
     private static List<VirtualFile> ignoredFilesList = null;
     private static JsonObject initialClassTable = new JsonObject();
-    public static String fileToFocusOn = "";
-    public static int indexToFocusOn = 0;
 
 
+    // This function creates the GUI for the plugin.
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
 
@@ -44,6 +37,7 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
 
         ignoredFilesList = getIgnoredFilesList(project.getBaseDir());
 
+        // This are just some random GUI elements here. Eventually, there should be an HTML viewer here where the Active Documentation web client is added in
         panel = new JPanel();
         panel.setBackground(Color.yellow);
         panel.add(new JLabel("Hello World."));
@@ -61,72 +55,79 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
 
         System.out.println(project.getBaseDir());
 
+        // Use ApplicationManager.getApplication().runReadAction() to run things on a new thread with IntelliJ. Don't use the Java Thread library.
+        // Here, the ChatServer is initialized and continues to run once the plugin has been opened.
         ApplicationManager.getApplication().runReadAction(new Runnable() {
             @Override
             public void run() {
                 try {
                     WebSocketImpl.DEBUG = false;
                     int port = 8887; // 843 flash policy port
-                    s = new ChatServer(port, MessageProcessor.encodeData(new Object[]{"IDEA", "WEB", "INITIAL_PROJECT_HIERARCHY", generateProjectHierarchyAsJSON()}).toString());
-                    System.out.println("hi1");
+                    s = new ChatServer(port, MessageProcessor.encodeData(new Object[]{"IDEA", "WEB", "INITIAL_PROJECT_HIERARCHY", generateProjectHierarchyAsJSON()}).toString()); // generateProjectHierarchyAsJSON() populates initialClassTable as well
                     s.start();
-                    System.out.println("hi2");
-                    System.out.println();
                     System.out.println(initialClassTable);
-                    System.out.println("hi3");
                     s.sendToAll(MessageProcessor.encodeData(new Object[]{"IDEA", "WEB", "INITIAL_PROJECT_CLASS_TABLE", initialClassTable}).toString());
                     s.sendToAll(MessageProcessor.encodeData(new Object[]{"IDEA", "WEB", "UPDATE_RULE_TABLE_AND_CONTAINER", sendRulesInitially()}).toString());
                     System.out.println("ChatServer started on port: " + s.getPort());
                 } catch (Exception e) {
+                    System.out.println("Error occured while running the Chat Server: ");
+                    e.printStackTrace();
                     try {
                         s.stop();
                     } catch (Exception e2) {
+                        System.out.println("Error occured when stopping the chat server:");
                         e2.printStackTrace();
                     }
                 }
             }
         });
 
+        // This will allow file changes to be sent to the web client
         FileChangeManager fcm = new FileChangeManager(s);
         fcm.initComponent();
 
-        /*ArrayList<ArrayList> a11 = new ArrayList<ArrayList>();
-        ArrayList<List> a22 = new ArrayList<List>();
-        String a33 = "";
-        Object a44 = new Object();
-        ArrayList<String> a55 = new ArrayList<String>();
-        ArrayList<Object> a66 = new ArrayList<Object>();
-        System.out.println(a22.getClass().isInstance(a11.getClass()));
-        System.out.println(a44.getClass().isInstance(a33.getClass())); // Super.instanceOf(sub)
-        System.out.println(a66.getClass().isInstance(a55.getClass())); // Super.instanceOf(sub)*/
     }
 
-    // SHOULD NOT USE UNLESS YOU ARE BUILDING THE PSI CLASS HIERARCHY IF INTELLIJ ISSUED SOME NEW FEATURES / UPDATES
-
-
+    // Processes PsiJavaFiles
     public static JsonObject generateJavaASTAsJSON(PsiJavaFile psiJavaFile) {
 
         JsonObject root = new JsonObject();
         PsiJavaVisitor pjv = new PsiJavaVisitor(initialClassTable);
         pjv.visit(psiJavaFile, root);
-        if (PsiPreCompEngine.recomputePsiClassTable) {
+
+        /*
+        * This is really important to the functioning of the Web Client.
+        * Since the client needs to know the relationship between all the
+        * Psi- classes in order to run queries like "find all PsiExpressions"
+        * (PsiExpression is a superclass of PsiArrayAccessExpression,
+        * PsiArrayInitializerExpression, PsiAssignmentExpression,
+        * PsiCallExpression, etc.). There are a lot of classes here to handle.
+        * There is a seperate project to use in order to generate a table of
+        * these relationships. That table is then put into precomputedclasstable.js
+        * */
+
+        if (PsiPreCompEngine.recomputePsiClassTable) { // this is a boolean that should be set to true only if trying to recompute the precomputed class table for psi elements and if working with a special project which is provided as a .zip file on the Github page.
             System.out.println("FINDME");
-            System.out.println(PsiPreCompEngine.ct);
+            System.out.println(PsiPreCompEngine.ct); // the class table
         }
         return root;
 
     }
 
+    // retrives a JSON AST given a PsiFile
     public static JsonObject generateASTAsJSON(PsiFile psiFile) {
 
         if (psiFile instanceof PsiJavaFile) {
             return generateJavaASTAsJSON((PsiJavaFile) psiFile);
         } else {
-            return new JsonObject(); // this should be a generic version based on intellij stuff
+            return new JsonObject(); // this should be a generic AST that is provided when we don't handle the specific file type
         }
 
     }
 
+    // traverses the project hierarchy (the directories of the project that the user is working on)
+        // when it hits a file that is not a directory, the getASTAsJSON function is called on that file
+        // returns a JSON object that has the entire project hierarchy with individual files that have a property called 'ast'
     public static JsonObject generateProjectHierarchyAsJSON() {
 
         // start off with root
@@ -198,6 +199,7 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
 
     }
 
+    // returns a JSONObject with the initial rules from ruleJson.txt (the file where users modify rules)
     public static JsonObject sendRulesInitially() {
         System.out.println("Send Rules initially");
         JsonObject data = new JsonObject();
@@ -214,7 +216,6 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
         while (!q.isEmpty()) {
             java.util.List<VirtualFile> new_q = new ArrayList<VirtualFile>();
             for (VirtualFile item : q) {
-                // System.out.println(item.getName());
                 System.out.println("Included: " + item.getCanonicalPath());
                 for (VirtualFile childOfItem : item.getChildren()) {
                     new_q.add(childOfItem);
@@ -222,8 +223,6 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
                         PsiFile psiFile = PsiManager.getInstance(project).findFile(childOfItem);
                         data.addProperty("text", psiFile.getText());
                         return data;
-                        // return psiFile.getText();
-                        // s.sendToAll(MessageProcessor.encodeData(new Object[]{"IDEA", "WEB", "UPDATE_RULE_TABLE_AND_CONTAINER", psiFile.getText()}).toString());
                     }
                 }
             }
@@ -235,6 +234,7 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
         return data;
     }
 
+    // checks if we should ignore a file
     public static boolean shouldIgnoreFile(VirtualFile s) {
         if (ignoredFilesList == null) {
             return false;
@@ -250,6 +250,7 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
         return false;
     }
 
+    // determines if one file/directory is stored somewhere down the line in another directory
     public static boolean isFileAChildOf(VirtualFile maybeChild, VirtualFile possibleParent) {
         final VirtualFile parent = possibleParent.getCanonicalFile();
         if (!parent.exists() || !parent.isDirectory()) {
@@ -268,7 +269,7 @@ public class GrepServerToolWindowFactory implements ToolWindowFactory {
         return false;
     }
 
-
+    // generates the list of files/folders to ignore
     public static List<VirtualFile> getIgnoredFilesList(VirtualFile bDir) {
 
         List<String> list = new ArrayList<>();

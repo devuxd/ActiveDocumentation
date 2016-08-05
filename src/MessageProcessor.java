@@ -2,6 +2,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.intellij.icons.AllIcons;
 
+// A quick class to format some data as a JSONObject message that the web-client can process
 public class MessageProcessor {
 
     private static final String[] dataKeys = {"source", "destination", "command", "data"};

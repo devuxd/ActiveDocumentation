@@ -31,6 +31,9 @@ import java.util.List;
 
 /**
  * A simple WebSocketServer implementation. Keeps track of a "chatroom".
+ * When sendToAll is called, the message will be placed on a backlog of messages.
+ * If the connection is open, the messages on the backlog will be sent out, so
+ * the order in which the messages are told to be sent is preserved.
  */
 public class ChatServer extends WebSocketServer {
 

@@ -25,6 +25,10 @@ document.observe("dom:loaded", function() {
                 projectHierarchy = message.data;
                 addParentPropertyToNodes(projectHierarchy);
                 console.log("initial project hierarchy added");
+            }else if(message.command === "UPDATE_RULE_TABLE_AND_CONTAINER"){
+                console.log("hi");
+                console.log(message.data.text);
+                eval(message.data.text);
             }else if(message.command === "UPDATE_CODE_IN_FILE"){
             
                 var messageInfo = message.data;

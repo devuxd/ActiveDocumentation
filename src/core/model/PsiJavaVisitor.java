@@ -14,6 +14,8 @@ import java.util.HashSet;
 import java.util.List;
 
 
+// visitor for java files
+
 public class PsiJavaVisitor implements TreeVisitor {
 
     HashMap<PsiElement, JsonObject> map = new HashMap<>();
@@ -38,7 +40,7 @@ public class PsiJavaVisitor implements TreeVisitor {
             return;
         }
 
-        // SHOULD NOT USE UNLESS YOU ARE BUILDING THE PSI CLASS HIERARCHY IF INTELLIJ ISSUED SOME NEW FEATURES / UPDATES
+        // SHOULD NOT USE UNLESS YOU ARE BUILDING THE PSI CLASS HIERARCHY IF INTELLIJ ISSUED SOME NEW FEATURES / UPDATES (use the project that is a .zip file on GitHub)
         if (PsiPreCompEngine.recomputePsiClassTable) {
             PsiPreCompEngine.doStuff(psiElement);
         }
@@ -111,7 +113,7 @@ public class PsiJavaVisitor implements TreeVisitor {
             // System.out.println("-------------------");
         }
 
-        // customized properties that elements will have
+        // Extract data with IntrospectionUtil. Get only the primitive types so we can represent the data in the Json strucuture we build
         PropertyDescriptor[] propertyDescriptors = IntrospectionUtil.getProperties(element.getClass());
         for (PropertyDescriptor pd : propertyDescriptors) {
             if (isClassAcceptable(pd.getPropertyType()) && isVariableAcceptable(pd.getName())) {
@@ -146,6 +148,8 @@ public class PsiJavaVisitor implements TreeVisitor {
         return properties;
 
     }
+
+    // these four functions help filter out some of the less useful info the IDE provides
 
     public boolean isVariableAcceptable(String s) {
         return !unacceptableVars.contains(s);
