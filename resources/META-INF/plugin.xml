@@ -1,0 +1,38 @@
+<idea-plugin>
+  <id>active_doc_plugin</id>
+  <name>ActiveDoc Plugin</name>
+  <version>3.0</version>
+  <vendor email="smehrpou@gmu.edu" url="http://mason.gmu.edu/~smehrpou/">GMU DevUXD</vendor>
+
+  <description><![CDATA[
+  ActiveDocumentation Tool
+    ]]></description>
+
+  <change-notes><![CDATA[
+  The tool window in the plugin is not functional. Instead the plugin runs in background and is accessible in the browser immediately.
+    ]]>
+  </change-notes>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+  <idea-version since-build="145.0"/>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+       on how to target different products -->
+  <!-- uncomment to enable plugin in all products
+  <depends>com.intellij.modules.lang</depends>
+  -->
+
+  <project-components>
+    <component>
+      <implementation-class>FileChangeManager</implementation-class>
+    </component>
+  </project-components>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <toolWindow id="ActiveDocs" anchor="right" factoryClass="CustomToolWindowFactory"/>
+  </extensions>
+
+  <actions>
+    <!-- Add your actions here -->
+  </actions>
+</idea-plugin>
