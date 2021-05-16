@@ -1,20 +1,16 @@
+/*
+ * written by saharmehrpour
+ * This class creates the chat server using websockets.
+ */
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
-import org.java_websocket.*;
-import org.java_websocket.framing.Framedata;
+import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
 import java.net.InetSocketAddress;
-import java.net.UnknownHostException;
 import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-
-/*
- * edited by saharmehrpour
- */
 
 /**
  * A simple WebSocketServer implementation. Keeps track of a "chatroom".
@@ -24,124 +20,85 @@ import java.util.List;
  */
 public class ChatServer extends WebSocketServer {
 
-    private List<String> backedUpMessages = new LinkedList<>();
-    private FileChangeManager manager; // to process received messages
-
     /**
-     *
      * @param port = 8887
-     * @throws UnknownHostException
      */
-    ChatServer(int port) throws UnknownHostException {
+    ChatServer(int port) {
         super(new InetSocketAddress(port));
-    }
-
-    void setManager(FileChangeManager fcm) {
-        manager = fcm;
     }
 
     @Override
     public void onOpen(WebSocket conn, ClientHandshake handshake) {
-        // this.sendToAll( "new connection: " + handshake.getResourceDescriptor() );
-        System.out.println("(onOpen) " + conn.getRemoteSocketAddress().getAddress().getHostAddress() + " entered the room!");
+        System.out.println("(onOpen) " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
+
+        FileChangeManager manager = FileChangeManager.getInstance();
 
         // check whether the project is changed
         manager.checkChangedProject();
-
-        this.sendInitialMessages(conn, MessageProcessor.encodeData(new Object[]{"IDEA", "WEB", "ENTER", (conn + " has entered the room!")}).toString());
-
-//        for (int i = 0; i < Math.min(5, manager.getSrcml().fileNumber); i++) {
+        this.sendAMessage(conn, MessageProcessor.encodeData(new Object[]{WebSocketConstants.SEND_ENTER_CHAT_MSG,
+                (conn + " connected to ActiveDocumentation")}).toString());
+        this.sendAMessage(conn, MessageProcessor.encodeData(new Object[]{WebSocketConstants.SEND_PROJECT_PATH_MSG,
+                manager.projectPath}).toString());
+        this.sendAMessage(conn, MessageProcessor.encodeData(new Object[]{WebSocketConstants.SEND_PROJECT_HIERARCHY_MSG,
+                manager.generateProjectHierarchyAsJSON()}).toString());
         for (int i = 0; i < manager.getSrcml().fileNumber; i++) {
-            this.sendInitialMessages(conn, MessageProcessor.encodeData(new Object[]{"IDEA", "WEB", "XML",
-                    MessageProcessor.encodeXMLData(new Object[]{manager.getSrcml().getPaths().get(i), manager.getSrcml().getXmls().get(i)})
+            this.sendAMessage(conn, MessageProcessor.encodeData(new Object[]{WebSocketConstants.SEND_XML_FILES_MSG,
+                    MessageProcessor.encodeXMLData(new Object[]{
+                            manager.getSrcml().getPaths().get(i), manager.getSrcml().getXmls().get(i)})
             }).toString());
         }
-
-        this.sendInitialMessages(conn, MessageProcessor.encodeData(new Object[]{"IDEA", "WEB", "RULE_TABLE", manager.getAllRules()}).toString());
-        this.sendInitialMessages(conn, MessageProcessor.encodeData(new Object[]{"IDEA", "WEB", "TAG_TABLE", manager.getAllTags()}).toString());
-        this.sendInitialMessages(conn, MessageProcessor.encodeData(new Object[]{"IDEA", "WEB", "VERIFY_RULES", ""}).toString());
-        this.sendInitialMessages(conn, MessageProcessor.encodeData(new Object[]{"IDEA", "WEB", "PROJECT_HIERARCHY", manager.generateProjectHierarchyAsJSON()}).toString());
-        this.sendInitialMessages(conn, MessageProcessor.encodeData(new Object[]{"IDEA", "WEB", "PROJECT", manager.projectPath}).toString());
-
-        sendBackedUpMessages();
+        this.sendAMessage(conn, MessageProcessor.encodeData(new Object[]{WebSocketConstants.SEND_RULE_TABLE_MSG,
+                FollowAndAuthorRulesProcessor.getInstance().getRuleTable()}).toString());
+        this.sendAMessage(conn, MessageProcessor.encodeData(new Object[]{WebSocketConstants.SEND_TAG_TABLE_MSG,
+                FollowAndAuthorRulesProcessor.getInstance().getTagTable()}).toString());
+        this.sendAMessage(conn, MessageProcessor.encodeData(new Object[]{WebSocketConstants.SEND_VERIFY_RULES_MSG,
+                ""}).toString());
     }
 
     @Override
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
-        this.sendToAll(MessageProcessor.encodeData(new Object[]{"IDEA", "WEB", "LEFT", (conn + " has left the room!")}).toString());
+        this.sendToAll(MessageProcessor.encodeData(new Object[]{WebSocketConstants.SEND_LEFT_CHAT_MSG,
+                (conn + " disconnected")}).toString());
         System.out.println("(onClose) " + conn + " has left the room!");
     }
 
     @Override
     public void onMessage(WebSocket conn, String message) {
+        final JsonObject messageAsJson = JsonParser.parseString(message).getAsJsonObject();
 
-        JsonParser parser = new JsonParser();
-        final JsonObject messageAsJson = parser.parse(message).getAsJsonObject();
-        System.out.println("(onMessage) " /*+ messageAsJson*/);
-        System.out.println(message);
-        manager.processReceivedMessages(messageAsJson);
+        FollowAndAuthorRulesProcessor faw = FollowAndAuthorRulesProcessor.getInstance();
 
+        if (faw.wsMessages.contains(messageAsJson.get(WebSocketConstants.MESSAGE_KEY_COMMAND).getAsString())) {
+            faw.processReceivedMessages(messageAsJson);
+        }
     }
-
-    @Override
-    public void onFragment(WebSocket conn, Framedata fragment) {
-        System.out.println("(onFragment) " /*+ "received fragment: " + fragment*/);
-    }
-
 
     @Override
     public void onError(WebSocket conn, Exception ex) {
         System.out.println("(onError) ");
-        ex.printStackTrace();
+    }
+
+    @Override
+    public void onStart() {
+        System.out.println("(Started) ");
     }
 
     /**
      * @param text The String to send across the network.
      */
     void sendToAll(String text) {
-        Collection<WebSocket> con = connections();
-        backedUpMessages.add(text);
-        if (con.size() == 0) {
-            System.out.println("(sendToAll) " + "Putting message on hold since there's no connection.");
+        Collection<WebSocket> conn = getConnections();
+        if (conn.size() == 0) {
+            System.out.println("(sendToAll) " + "There's no connection.");
         } else {
-            sendMessage(con);
-        }
-    }
-
-    private void sendBackedUpMessages() {
-
-        Collection<WebSocket> con = connections();
-        if (con.size() == 0) {
-            if (backedUpMessages.size() > 0) {
-                System.out.println("(sendBackedUpMessages) " + "Can't clear out backlog since there's no connection right now.");
+            for (WebSocket c : conn) {
+                c.send(text);
+                System.out.println("(sendMessage) ");
             }
-        } else {
-            sendMessage(con);
         }
     }
 
-
-    /**
-     * extracted local method
-     * send the message to all connections
-     *
-     * @param con list of connections
-     */
-    private void sendMessage(Collection<WebSocket> con) {
-        while (con.size() != 0 && !backedUpMessages.isEmpty()) {
-            String itemToSend = backedUpMessages.get(0);
-            synchronized (con) {
-                for (WebSocket c : con) {
-                    c.send(itemToSend);
-                    System.out.println("(sendMessage) " /*+ "Server sent: " + itemToSend*/);
-                }
-            }
-            backedUpMessages.remove(0);
-        }
-    }
-
-
-    private void sendInitialMessages(WebSocket con, String message) {
+    private void sendAMessage(WebSocket con, String message) {
         con.send(message);
     }
 }

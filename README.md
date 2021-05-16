@@ -2,11 +2,9 @@
 
 This tool is an [IntelliJ IDEA](https://www.jetbrains.com/idea/) plugin. 
 
-## Difference with the original version of the plugin
+- It communicates with the [Main Component](https://github.com/devuxd/active-doc-client/blob/RulePad-version) using "Web-Socket".
+- It is based on _srcML_ library, which should be installed as instructed [here](https://github.com/devuxd/active-doc-client/wiki#installing-srcml).
 
-In this version, the core of the plugin is based on [SRCML](http://www.srcml.org/). In essence, the source-code of the project is encoded in an XML file. This XML file is then processed via XPath queries for different rules. The main XML file is a variable in the plugin code and is not accessible out of it. However, the temporary process results are written in files in the project folder. Removing these files are safe.
+There are two files `ruleTable.json` for storing design rules and `tagTable.json` for storing tags.
+The format of these files are described [here](https://github.com/devuxd/active-doc-client/blob/RulePad-version/README.md).
 
-
-## ruleJson.txt and tagJson.txt
-
-There must be two files named `ruleJson.txt` and `tagJson.txt` in the project folder. The example for these files can be found in `README.md` in **active-doc-client** repository.
