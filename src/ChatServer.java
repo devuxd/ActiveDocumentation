@@ -67,14 +67,9 @@ public class ChatServer extends WebSocketServer {
         final JsonObject messageAsJson = JsonParser.parseString(message).getAsJsonObject();
 
         FollowAndAuthorRulesProcessor faw = FollowAndAuthorRulesProcessor.getInstance();
-        MiningRulesProcessor mr = MiningRulesProcessor.getInstance();
 
         if (faw.wsMessages.contains(messageAsJson.get(WebSocketConstants.MESSAGE_KEY_COMMAND).getAsString())) {
             faw.processReceivedMessages(messageAsJson);
-        }
-
-        else if (mr.wsMessages.contains(messageAsJson.get(WebSocketConstants.MESSAGE_KEY_COMMAND).getAsString())) {
-            mr.processReceivedMessages(messageAsJson);
         }
     }
 

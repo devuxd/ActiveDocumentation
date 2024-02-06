@@ -68,18 +68,6 @@ public class FileChangeManager implements StartupActivity {
         } catch (NullPointerException e) {
             new FollowAndAuthorRulesProcessor(project, ws);
         }
-        try {
-            MiningRulesProcessor ins = MiningRulesProcessor.getInstance();
-            ins.updateProjectWs(project, ws);
-        } catch (NullPointerException e) {
-            new MiningRulesProcessor(project, ws);
-        }
-        try {
-            DoiProcessing ins = DoiProcessing.getInstance();
-            ins.updateProject(project);
-        } catch (NullPointerException e) {
-            new DoiProcessing(project);
-        }
 
         connection.subscribe(VirtualFileManager.VFS_CHANGES, new BulkFileListener() {
             @Override
@@ -110,7 +98,6 @@ public class FileChangeManager implements StartupActivity {
                         if (Objects.requireNonNull(event.getManager().getSelectedFiles()[0].getCanonicalFile())
                                 .getName().endsWith(".java")) {
                             String filePath = event.getManager().getSelectedFiles()[0].getPath();
-                            DoiProcessing.getInstance().newVisitedFile(filePath);
                             sendMessage(MessageProcessor.encodeData(new Object[]{
                                     WebSocketConstants.SEND_FILE_CHANGE_IN_IDE_MSG, filePath}).toString());
                         }

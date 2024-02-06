@@ -9,13 +9,6 @@ class MessageProcessor {
     private static final String[] xmlKeys = {"filePath", "xml"};
     private static final String[] textXMLKeys = {"xmlText", "messageID"};
 
-    private static final String[] selectedFragmentKeys = {"filePath", "startOffset", "endOffset", "startLineOffset",
-            "lineNumber", "lineText", "text"};
-    private static final String[] doiInformationKeys = {"recentVisitedFiles", "recentSearches", "recentVisitedElements"};
-    private static final String[] minedRulesKey = {"minedFrequentItemSets", "algorithm"};
-    private static final String[] elementInfoForForMineRules = {"filePath", "startOffset", "startLineOffset",
-            "lineNumber", "text"};
-
     static JsonObject encodeData(Object[] source_Destination_Protocol_Data_Array) {
         return createJsonObject(source_Destination_Protocol_Data_Array, dataKeys);
     }
@@ -30,24 +23,6 @@ class MessageProcessor {
 
     static JsonObject encodeXMLandText(Object[] xml_text) {
         return createJsonObject(xml_text, textXMLKeys);
-    }
-
-    /*  mining rules*/
-
-    static JsonObject encodeSelectedFragment(Object[] selected_frag_data) {
-        return createJsonObject(selected_frag_data, selectedFragmentKeys);
-    }
-
-    static JsonObject encodeDoiInformation(Object[] doi_information) {
-        return createJsonObject(doi_information, doiInformationKeys);
-    }
-
-    static JsonObject encodeMinedRules(Object[] mined_rules_output) {
-        return createJsonObject(mined_rules_output, minedRulesKey);
-    }
-
-    static JsonObject encodeElementInfoForMineRules(Object[] mine_rules_for_file_info) {
-        return createJsonObject(mine_rules_for_file_info, elementInfoForForMineRules);
     }
 
     private static JsonObject createJsonObject(Object[] data_Array, String[] keys) {

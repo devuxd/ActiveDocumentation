@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>active_doc_plugin</id>
   <name>ActiveDoc</name>
-  <version>3.0 Beta</version>
+  <version>1</version>
   <vendor email="smehrpou@gmu.edu" url="http://devx.cs.gmu.edu/">GMU DevUXD</vendor>
 
   <description><![CDATA[
@@ -10,10 +10,6 @@
   This tool helps in validating code against design rules.
     ]]></description>
 
-  <change-notes><![CDATA[
-  The tool is running spmf.jar file.
-    ]]>
-  </change-notes>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
   <idea-version since-build="172.0"/>
@@ -29,15 +25,6 @@
       <implementation-class>FileChangeManager</implementation-class>
     </component>
   </project-components>
-
-  <actions>
-    <group id="actionGroup">
-      <action id="MineRulesForFileAction" class="MineRulesForFileAction" text="Mine Rules"
-              description="Mine design rules for a specific file"/>
-      <separator/>
-      <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-    </group>
-  </actions>
 
   <extensions defaultExtensionNs="com.intellij">
     <postStartupActivity implementation="FileChangeManager"/>
